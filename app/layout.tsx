@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Image from "next/image";
 import mainLogo from "../assets/mainLogo.png";
+import Providers from "./providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,13 +31,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header
-          className="py-[38px] px-[162px] bg-[#FFFFFF
+        <Providers>
+          <header
+            className="py-[38px] px-[162px] bg-[#FFFFFF
 ]  border border-[#DBDBDB]"
-        >
-          <Image src={mainLogo} alt="Main logo" width={150} height={24} />
-        </header>
-        {children}
+          >
+            <Image src={mainLogo} alt="Main logo" width={150} height={24} />
+          </header>
+          {children}
+        </Providers>
       </body>
     </html>
   );
