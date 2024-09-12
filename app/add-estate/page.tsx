@@ -5,7 +5,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getAllCities, getAllRegions } from "@/utils/action";
-import AddNewEstate from "@/components/AddNewEstate";
+import AddNewEstate from "@/components/RealEstateForm";
 
 const AddNewEstatePage = async () => {
   const queryClient = new QueryClient();

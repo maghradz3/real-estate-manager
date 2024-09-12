@@ -48,3 +48,22 @@ export const getAllCities = async (): Promise<City[]> => {
     throw error;
   }
 };
+
+export const createAgent = async (data: FormData): Promise<void> => {
+  try {
+    const response = await axios.post(
+      "https://api.real-estate-manager.redberryinternship.ge/api/agents",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating agent:", error);
+    throw error;
+  }
+};
