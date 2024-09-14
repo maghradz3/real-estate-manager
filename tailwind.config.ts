@@ -12,10 +12,11 @@ const config: Config = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "green-500": "#22c55e",
         "default-primary": "#F93B1D",
         "hover-primary": "#DF3014",
         "black-1": "#1A1A1F",
-        success: "#45A849",
+
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",

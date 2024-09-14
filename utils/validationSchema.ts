@@ -12,11 +12,20 @@ export const realEstateSchema = z.object({
 });
 
 export const agentSchema = z.object({
-  name: z.string().min(3, "გთხოვთ შეიყვანოთ სახელი"),
-  surname: z.string().min(3, "გთხოვთ შეიყვანოთ გვარი"),
-  email: z.string().email("გთხოვთ შეიყვანოთ ელ-ფოსტა"),
-  phone: z.string().min(9, "გთხოვთ შეიყვანოთ ტელეფონი"),
+  name: z.string().min(2, "მინიმუმ ორი სიმბოლო").nonempty("სავალდებულო სახელი"),
+  surname: z
+    .string()
+    .min(2, "მინიმუმ ორი სიმბოლო")
+    .nonempty("სავალდებულო გვარი"),
+  email: z
+    .string()
+    .nonempty("სავალდებულო მეილი")
+    .regex(/@redberry\.ge$/, "მეილი უნდა სრულდებოდეს @redberry.ge"),
+  phone: z
+    .string()
+    .regex(/^5\d{8}$/, "ნომერი უნდა იყოს  5XXXXXXXXX ფორმატით")
+    .nonempty("ნომერი სავალდებულოა"),
   avatar: z
     .instanceof(File)
-    .refine((file) => file.size > 0, "გთხოვთ ატვირთოთ სურათი"),
+    .refine((file) => file.size > 0, "სავალდებულო ფოტო"),
 });

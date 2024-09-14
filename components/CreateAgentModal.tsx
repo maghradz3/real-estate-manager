@@ -28,17 +28,11 @@ const CreateAgentModal = () => {
         Open Modal
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger
-          onClick={openModal}
-          className="w-[100px] h-[60px] bg-slate-400"
-        >
-          Open
-        </DialogTrigger>
         <DialogContent className="  flex flex-col items-center  ">
-          <DialogTitle className="text-3xl pt-[87px]">
+          <DialogTitle className="text-3xl mt-[87px] mb-[61px]">
             აგენტის დამატება
           </DialogTitle>
-          <CreateAgentForm closeModal={closeModal} />
+          <CreateAgentForm closeModal={closeModal} setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     </>

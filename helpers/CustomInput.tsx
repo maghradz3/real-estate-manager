@@ -1,34 +1,83 @@
 "use client";
-import { useFormContext, RegisterOptions } from "react-hook-form";
 
-import { FieldError } from "react-hook-form";
-import { Input, InputProps } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
-interface CustomInputProps extends InputProps {
-  name: string;
+interface CustomInputProps {
   label: string;
-  rules?: RegisterOptions;
+  name: string;
+
+  handleKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  tel?: string;
+  validate: string;
+  register: UseFormRegisterReturn;
   error?: FieldError;
+  className?: string;
+  labelClassName?: string;
+  inputClassName?: string;
+  isValid: boolean;
+  isTouched: boolean;
 }
 
 const CustomInput = ({
-  name,
   label,
-  rules,
+  name,
+
+  tel,
+  handleKeyDown,
+  labelClassName,
+  validate,
+  register,
+  inputClassName,
   error,
-  ...rest
+  className,
+  isValid,
+  isTouched,
 }: CustomInputProps) => {
-  const { register } = useFormContext();
+  const handleKeyDownHandler = handleKeyDown && handleKeyDown;
+
+  const greenStyle = isValid && isTouched ? true : false;
+
+  const getValidationTextColor = () => {
+    if (error) {
+      return "text-red-500";
+    }
+    if (isValid && isTouched) {
+      console.log(greenStyle);
+      return "text-green-500 !important";
+    }
+    return "text-yellow-400 !important";
+  };
+
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={name}>{label}</label>
+    <div className="flex flex-col gap-[5px]">
+      <label className={labelClassName} htmlFor={name}>
+        {label}
+      </label>
       <Input
-        type="number"
-        {...register(name, rules)}
-        placeholder={label}
-        {...rest}
+        type="tel"
+        inputMode="numeric"
+        pattern="[0-3]*"
+        onKeyDown={handleKeyDownHandler}
+        className={cn("w-full input_default", {
+          "border-red-500 ring-1 ring-red-500 focus:ring-red-500 focus:border-red-500 focus:ring-0 focus:outline-none focus-visible:ring-red-500 focus-visible:outline-red-500 ":
+            error,
+        })}
+        id={name}
+        {...register}
       />
-      {error && <p className="text-default-primary">{error.message}</p>}
+
+      <p
+        className={`${getValidationTextColor()} flex justify-start items-center`}
+      >
+        <span className="w-[1opx] h-[8px] text-black-1 ">&#10003;</span>
+        {error
+          ? error.message
+          : isTouched && isValid
+          ? `${validate}`
+          : `${validate}`}
+      </p>
     </div>
   );
 };

@@ -13,6 +13,18 @@ body {
   overflow-x: hidden;
 }
 
+@layer utilities {
+  .label_default {
+    @apply font-medium text-[14px] leading-4 text-black-1
+  }
+
+  .input_default {
+    @apply h-[42px] rounded-md p-[10x]
+  }
+}
+
+
+
 
 .main-container {
   min-width: 1920px;
@@ -68,6 +80,7 @@ screen and (max-height: 1080px) {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -101,6 +114,7 @@ screen and (max-height: 1080px) {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

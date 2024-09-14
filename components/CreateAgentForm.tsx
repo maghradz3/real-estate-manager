@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { set, z } from "zod";
 
 import { Input } from "./ui/input";
 
@@ -11,31 +11,47 @@ import { useState } from "react";
 import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 import { createAgent } from "@/utils/action";
+import CustomInput from "@/helpers/CustomInput";
+
+import { handleKeyDown } from "@/helpers/NumericHandler";
+import plusImage from "../assets/plus-circle.png";
+import { on } from "events";
+import { cn } from "@/lib/utils";
 
 interface CreateAgentFormProps {
   closeModal: (
     e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
   ) => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type AgentFormValues = z.infer<typeof agentSchema>;
 
-const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ closeModal }) => {
+const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
+  closeModal,
+  setOpen,
+}) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, touchedFields },
     setValue,
+    watch,
   } = useForm<AgentFormValues>({
     resolver: zodResolver(agentSchema),
     mode: "onChange",
   });
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const mutation = useMutation({
     mutationFn: async (formData: FormData) => {
       return await createAgent(formData);
+    },
+    onSuccess: () => {
+      setOpen(false);
+      console.log("success");
     },
   });
 
@@ -65,78 +81,91 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ closeModal }) => {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className=" flex flex-col w-[799px] border border-red-400  mt-[88px] mb-[188px]"
+        noValidate
+        className=" flex flex-col w-[799px]   mb-[87px]"
       >
-        <div className="w-full   grid grid-cols-2 grid-row-2 gap-[28px]">
-          <div>
-            <label htmlFor="firstName">სახელი *</label>
-            <Input
-              className="w-full"
-              id="firstName"
-              {...register("name")}
-              placeholder="მინიმუმ ორი სიმბოლო"
-            />
-            {errors.name && (
-              <p className="text-red-500">{errors.name.message}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="surname">გვარი *</label>
-            <Input
-              id="surname"
-              {...register("surname")}
-              placeholder="მინიმუმ ორი სიმბოლო"
-            />
-            {errors.surname && (
-              <p className="text-red-500">{errors.surname.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="email">ელ-ფოსტა *</label>
-            <Input
-              id="email"
-              {...register("email")}
-              placeholder="გამოიყენე @redberry.ge ფოსტა"
-            />
-            {errors.email && (
-              <p className="text-red-500">{errors.email.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="phone">ტელეფონის ნომერი *</label>
-            <Input
-              id="phone"
-              {...register("phone")}
-              placeholder="მობილური რიცხვები"
-            />
-            {errors.phone && (
-              <p className="text-red-500">{errors.phone.message}</p>
-            )}
-          </div>
-        </div>
-        <div>
-          <label htmlFor="image">ატვირთეთ ფოტო *</label>
-          <Input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleImageChange}
+        <div className="w-full   grid grid-cols-2 grid-row-2 gap-[20px]">
+          <CustomInput
+            label="სახელი *"
+            validate="მინიმუმ 2 სიმბოლო"
+            name="name"
+            register={register("name")}
+            error={errors.name}
+            labelClassName="label_default"
+            inputClassName="input_default"
+            isValid={!errors.name && !!touchedFields.name}
+            isTouched={!!touchedFields.name}
           />
-          {errors.avatar && (
-            <p className="text-red-500">{errors.avatar.message}</p>
-          )}
-     
-          {previewImage && (
-            <Image
-              src={previewImage}
-              alt="Agent Preview"
-              className="mt-2 h-24 w-24 rounded-md object-cover"
-              width={96}
-              height={96}
+          <CustomInput
+            label="გვარი *"
+            validate="მინიმუმ ორი სიმბოლო"
+            name="surname"
+            register={register("surname")}
+            error={errors.surname}
+            labelClassName="label_default"
+            isValid={!errors.name && !!touchedFields.name}
+            isTouched={!!touchedFields.name}
+          />
+
+          <CustomInput
+            label="ელ-ფოსტა *"
+            validate="გამოიყენეთ @redberry.ge-ით"
+            name="email"
+            register={register("email")}
+            error={errors.email}
+            labelClassName="label_default"
+            isValid={!errors.name && !!touchedFields.name}
+            isTouched={!!touchedFields.name}
+          />
+
+          <CustomInput
+            label="ტელეფონი *"
+            validate="მხოლოდ რიცხვები"
+            name="phone"
+            tel="tel"
+            handleKeyDown={handleKeyDown}
+            register={register("phone")}
+            error={errors.phone}
+            labelClassName="label_default"
+            isValid={!errors.name && !!touchedFields.name}
+            isTouched={!!touchedFields.name}
+          />
+        </div>
+        <div className="mt-[20px]">
+          <label className="label_default" htmlFor="image">
+            ატვირთეთ ფოტო *
+          </label>
+          <div className="flex justify-center items-center w-full h-[144px] border-2 border-dashed border-gray-300 rounded-md relative cursor-pointer">
+            <input
+              className=" w-full absolute inset-0 opacity-0 cursor-pointer z-10"
+              type="file"
+              name="avatar"
+              accept="image/*"
+              onChange={handleImageChange}
             />
-          )}
+            <div className="flex flex-col items-center justify-center text-gray-500">
+              <Image
+                src={plusImage}
+                alt="add button"
+                width={24}
+                height={24}
+                className={cn("", { hidden: previewImage })}
+              />
+              {errors.avatar && (
+                <p className="text-red-500">{errors.avatar.message}</p>
+              )}
+
+              {previewImage && (
+                <Image
+                  src={previewImage}
+                  alt="Agent Preview"
+                  className="mt-2 h-24 w-24 rounded-md object-cover"
+                  width={136}
+                  height={96}
+                />
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="self-end flex justify-center items-center gap-[15px] mt-[95px]">
