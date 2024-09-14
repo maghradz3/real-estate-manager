@@ -22,3 +22,10 @@ export interface RealEstate {
   city_id: number;
   city: City;
 }
+
+export interface Agents {
+  id: number;
+  name: string;
+  surname: string;
+  avatar: string;
+}

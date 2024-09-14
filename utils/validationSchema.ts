@@ -1,14 +1,40 @@
 import { z } from "zod";
 export const realEstateSchema = z.object({
-  adress: z.string().min(1, "Address is required"),
-  zip_code: z.string().min(1, "Zip code is required"),
-  price: z.number().min(1, "Price is required"),
-  area: z.number().min(1, "Area is required"),
-  bedrooms: z.number().int().min(1, "Bedrooms is required"),
-  is_rental: z.number().int().min(1, "Rental status is required"),
-  image: z.string().url("Must be a valid image URL"),
-  region_id: z.number().int().positive("Region ID is required"),
-  city_id: z.number().int().positive("City ID is required"),
+  address: z
+    .string()
+    .min(2, "მინიმუმ ორი სიმბოლო")
+    .nonempty("მისამართი სავალდებულოა"),
+  image: z
+    .instanceof(File)
+    .refine((file) => file.size <= 1000000, "სურათი უნდა იყოს 1MB-ზე ნაკლები")
+    .refine(
+      (file) => ["image/jpeg", "image/png"].includes(file.type),
+      "მხოლოდ JPG ან PNG ფორმატის სურათი"
+    ),
+  region: z.string().nonempty("რეგიონი სავალდებულოა "),
+  city: z.string().nonempty("ქალაქი სავალდებულოა"),
+  zip_code: z
+    .string()
+    .regex(/^\d+$/, "მხოლოდ რიცხვები")
+    .nonempty("ზიპ კოდი სავალდებულოა"),
+  price: z
+    .string()
+    .regex(/^\d+$/, "მხოლოდ რიცხვები")
+    .nonempty("ფასი სავალდებულოა"),
+  area: z
+    .string()
+    .regex(/^\d+$/, "მხოლოდ რიცხვები")
+    .nonempty("ფართი სავალდებულოა"),
+  bedrooms: z
+    .string()
+    .regex(/^\d+$/, "მხოლოდ რიცხვი")
+    .nonempty("საძინებლები სავალდებულოა"),
+  description: z
+    .string()
+    .min(5, "მინიმუმ 5 სიტყვა")
+    .nonempty("აღწერა სავალდებულოა"),
+  is_rental: z.string().nonempty("აირჩიეთ იყიდება თუ ქირავდება"),
+  agent: z.string().nonempty("აგენტი სავალდებულოა"),
 });
 
 export const agentSchema = z.object({

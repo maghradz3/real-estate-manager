@@ -12,7 +12,8 @@ const config: Config = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        "green-500": "#22c55e",
+        "green-1": "#22c55e",
+        "green-2": "#45A849",
         "default-primary": "#F93B1D",
         "hover-primary": "#DF3014",
         "black-1": "#1A1A1F",

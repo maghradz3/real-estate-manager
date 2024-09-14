@@ -1,5 +1,5 @@
 "use server";
-import { City, RealEstate, Region } from "@/utils/types";
+import { Agents, City, RealEstate, Region } from "@/utils/types";
 import axios from "axios";
 
 const API_URL =
@@ -64,6 +64,23 @@ export const createAgent = async (data: FormData): Promise<void> => {
     return response.data;
   } catch (error) {
     console.error("Error creating agent:", error);
+    throw error;
+  }
+};
+
+export const getAllAgents = async (): Promise<Agents[]> => {
+  try {
+    const { data } = await axios.get<Agents[]>(
+      "https://api.real-estate-manager.redberryinternship.ge/api/agents",
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error fetching agents:", error);
     throw error;
   }
 };

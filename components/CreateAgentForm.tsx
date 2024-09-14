@@ -1,9 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { set, z } from "zod";
-
-import { Input } from "./ui/input";
+import { z } from "zod";
 
 import { agentSchema } from "@/utils/validationSchema";
 import { useState } from "react";
@@ -15,7 +13,7 @@ import CustomInput from "@/helpers/CustomInput";
 
 import { handleKeyDown } from "@/helpers/NumericHandler";
 import plusImage from "../assets/plus-circle.png";
-import { on } from "events";
+
 import { cn } from "@/lib/utils";
 
 interface CreateAgentFormProps {
@@ -56,6 +54,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
   });
 
   const onSubmit = async (data: AgentFormValues) => {
+    console.log("subiting agent");
     const formData = new FormData();
     console.log(data.name);
     formData.append("name", data.name);

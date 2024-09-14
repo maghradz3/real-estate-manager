@@ -1,15 +1,18 @@
 "use client";
-import { getAllCities, getAllRegions } from "@/utils/action";
+import { getAllAgents, getAllCities, getAllRegions } from "@/utils/action";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { realEstateSchema } from "@/utils/validationSchema";
 import { z } from "zod";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import CustomInput from "@/helpers/CustomInput";
 import { Button } from "./ui/button";
 import CreateAgentModal from "./CreateAgentModal";
+import DropDownSelect from "@/helpers/DropDownSelect";
 
 type RealEstateFormValues = z.infer<typeof realEstateSchema>;
 const RealEstateForm = () => {
@@ -22,20 +25,40 @@ const RealEstateForm = () => {
     queryFn: () => getAllCities(),
   });
 
-  console.log(regions);
-
-  const methods = useForm<RealEstateFormValues>({
-    resolver: zodResolver(realEstateSchema),
+  const { data: agents } = useQuery({
+    queryKey: ["agents"],
+    queryFn: () => getAllAgents(),
   });
 
-  const {
-    handleSubmit,
+  const [selectedRegion, setSelectedRegion] = React.useState<number | null>(
+    null
+  );
+  const [previewImage, setPreviewImage] = React.useState<string | null>(null);
 
-    formState: { errors },
-  } = methods;
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors, touchedFields, dirtyFields },
+  } = useForm<RealEstateFormValues>({
+    resolver: zodResolver(realEstateSchema),
+    mode: "onChange",
+  });
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setValue("image", file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
 
   const onSubmit = (data: RealEstateFormValues) => {
-    console.log("form data", data);
+    console.log("submited");
+    const formData = new FormData();
+    formData.append("is_rental", data.is_rental);
+    console.log(data.is_rental);
   };
 
   return (
@@ -47,44 +70,55 @@ const RealEstateForm = () => {
         {" "}
         ლისტინგის დამატება
       </h1>
-      <FormProvider {...methods}>
-        <CreateAgentModal />
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-1/2 h-[1211px] border border-gray-300 p-1"
-        >
-          <h1 className="font-xl font-black-1 mb-5">მდებარეობა</h1>
-          <div className="grid grid-cols-2 grid-rows-2 gap-4">
-            <CustomInput
-              name="adress"
-              label="მისამართი"
-              error={errors.adress}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <RadioGroup className="flex " defaultValue="0">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem {...register("is_rental")} value="0" id="0" />
+              <Label htmlFor="0">იყიდება</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem {...register("is_rental")} value="1" id="1" />
+              <Label htmlFor="1">ქირავდება</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        <div className="grid grid-cols-2 grid-rows-2 gap-5 w-full">
+          <CustomInput
+            label="მისამართი *"
+            name="address"
+            register={register("address")}
+            validate="მინიმუმ 2 სიმბოლო"
+            error={errors.address}
+            isValid={!!dirtyFields.address && !errors.address}
+            isTouched={!!touchedFields.address}
+          />
+          <CustomInput
+            label="საფოსტო ინდექსი *"
+            name="zip_code"
+            register={register("zip_code")}
+            error={errors.zip_code}
+            validate="მხოლოდ რიცხვები"
+            isValid={!!dirtyFields.zip_code && !errors.zip_code}
+            isTouched={!!touchedFields.zip_code}
+          />
+          <div className="w-[384px]">
+            <DropDownSelect
+              options={regions || []}
+              label="რეგიონი *"
+              onChange={(regionId) => {
+                setSelectedRegion(regionId);
+                setValue("region", regionId.toString());
+              }}
             />
-            <CustomInput
-              name="zip_code"
-              label="Zip Code"
-              error={errors.zip_code}
-            />
-            <CustomInput name="price" label="ფასი" error={errors.price} />
-            <CustomInput name="area" label="ფართი" error={errors.area} />
-            <CustomInput
-              name="bedrooms"
-              label="საძინებლები"
-              error={errors.bedrooms}
-            />
-            <CustomInput name="is_rental" label="ქირავდება" />
-
-            <CustomInput name="image" label="სურათი" error={errors.image} />
-            <CustomInput
-              name="region_id"
-              label="რეგიონი"
-              error={errors.region_id}
-            />
-            <CustomInput name="city_id" label="ქალაქი" error={errors.city_id} />
+            {errors.region && (
+              <p className="text-red-500">{errors.region.message}</p>
+            )}
           </div>
-          <Button type="submit">Submit</Button>
-        </form>
-      </FormProvider>
+        </div>
+        <Button type="submit">Submit</Button>
+      </form>
+      <CreateAgentModal />
     </div>
   );
 };
