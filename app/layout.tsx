@@ -4,6 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import mainLogo from "../assets/mainLogo.png";
 import Providers from "./providers";
+import Link from "next/link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,7 +37,9 @@ export default function RootLayout({
             className="py-[38px] px-[162px] bg-[#FFFFFF
 ]  border border-[#DBDBDB]"
           >
-            <Image src={mainLogo} alt="Main logo" width={150} height={24} />
+            <Link href="/">
+              <Image src={mainLogo} alt="Main logo" width={150} height={24} />
+            </Link>
           </header>
           {children}
         </Providers>

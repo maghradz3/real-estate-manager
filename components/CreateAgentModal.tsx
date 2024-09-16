@@ -30,7 +30,7 @@ const CreateAgentModal = () => {
         onClick={openModal}
       >
         <IoIosAddCircleOutline className="w-[20px] h-[20px]" />
-        <p>Open Modal</p>
+        <p>დაამატეთ აგენტი</p>
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="  flex flex-col items-center  ">
