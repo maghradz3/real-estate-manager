@@ -1,5 +1,5 @@
 "use server";
-import { Agents, City, RealEstate, Region } from "@/utils/types";
+import { Agents, City, getRealEstate, RealEstate, Region } from "@/utils/types";
 import axios from "axios";
 
 const API_URL =
@@ -17,6 +17,40 @@ export const getAllRealEstates = async (): Promise<RealEstate[]> => {
   }
 };
 
+export const getRealEstateById = async (id: number): Promise<getRealEstate> => {
+  try {
+    const { data } = await axios.get<getRealEstate>(
+      `https://api.real-estate-manager.redberryinternship.ge/api/real-estates/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error fetching real estate by id:", error);
+    throw error;
+  }
+};
+
+export const deleteRealEstateById = async (id: number) => {
+  try {
+    const response = await axios.delete(
+      `https://api.real-estate-manager.redberryinternship.ge/api/real-estates/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting real estate by id:", error);
+    throw error;
+  }
+};
+
 export const getAllRegions = async (): Promise<Region[]> => {
   try {
     const { data } = await axios.get<Region[]>(
@@ -29,7 +63,6 @@ export const getAllRegions = async (): Promise<Region[]> => {
     return data;
   } catch (error) {
     console.error("Error fetching regions:", error);
-    throw error;
   }
 };
 
