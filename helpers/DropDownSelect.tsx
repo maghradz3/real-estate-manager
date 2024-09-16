@@ -10,14 +10,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 interface DropdownSelectProps {
-  options: { id: number; name: string }[];
+  forCities?: boolean;
+  optionsRegion?: { id: number; name: string }[];
+  optionsCity?: { id: number; name: string; region_id: number }[];
   onChange: (selectedId: number) => void;
   label: string;
   multiSelect?: boolean;
 }
 
 const DropDownSelect = ({
-  options,
+  forCities,
+  optionsRegion,
+  optionsCity,
   onChange,
   label,
   multiSelect,
@@ -25,6 +29,7 @@ const DropDownSelect = ({
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const generalOptions = forCities ? optionsCity : optionsRegion;
 
   const handleSelect = (id: number) => {
     if (multiSelect) {
@@ -55,9 +60,9 @@ const DropDownSelect = ({
         <div>
           {multiSelect
             ? selectedOptions
-                .map((id) => options.find((opt) => opt.id === id)?.name)
-                .join(", ") || "Select..."
-            : options.find((opt) => opt.id === selectedOption)?.name ||
+                .map((id) => generalOptions?.find((opt) => opt.id === id)?.name)
+                .join(", ") || "არჩევა"
+            : generalOptions?.find((opt) => opt.id === selectedOption)?.name ||
               "რეგიონი"}
           <span className="ml-2">
             <IoIosArrowDown />
@@ -76,7 +81,7 @@ const DropDownSelect = ({
           რეგიონი
         </h1>
         <div className=" h-[128px] grid grid-cols-3   gap-4 ">
-          {options.map((option) => (
+          {generalOptions?.map((option) => (
             <div
               key={option.id}
               className=" flex gap-2 justify-start items-center p-2 hover:bg-gray-200 "

@@ -41,10 +41,9 @@ const CustomInput = ({
 
   const getValidationTextColor = () => {
     if (error) {
-      return "text-red-500";
+      return "text-red-500 flex ";
     }
     if (isValid && isTouched) {
-      console.log(greenStyle);
       return "text-green-500 !important";
     }
     return "text-yellow-400 !important";
@@ -60,7 +59,7 @@ const CustomInput = ({
         inputMode="numeric"
         pattern="[0-3]*"
         onKeyDown={handleKeyDownHandler}
-        className={cn("w-full input_default", {
+        className={cn("input_default p-2.5", {
           "border-red-500 ring-1 ring-red-500 focus:ring-red-500 focus:border-red-500 focus:ring-0 focus:outline-none focus-visible:ring-red-500 focus-visible:outline-red-500 ":
             error,
         })}
@@ -71,7 +70,8 @@ const CustomInput = ({
       <p
         className={`${getValidationTextColor()} flex justify-start items-center`}
       >
-        <span className="w-[1opx] h-[8px] text-black-1 ">&#10003;</span>
+        <span className="">&#10003;</span>
+
         {error
           ? error.message
           : isTouched && isValid

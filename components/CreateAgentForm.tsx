@@ -7,7 +7,11 @@ import { agentSchema } from "@/utils/validationSchema";
 import { useState } from "react";
 
 import Image from "next/image";
-import { useMutation } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { createAgent } from "@/utils/action";
 import CustomInput from "@/helpers/CustomInput";
 
@@ -35,21 +39,26 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
     formState: { errors, isValid, touchedFields },
     setValue,
     watch,
+    reset,
   } = useForm<AgentFormValues>({
     resolver: zodResolver(agentSchema),
     mode: "onChange",
   });
 
+  const queryClient = useQueryClient();
+
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async (formData: FormData) => {
       return await createAgent(formData);
     },
     onSuccess: () => {
       setOpen(false);
       console.log("success");
+      queryClient.invalidateQueries({ queryKey: ["agents"] });
+      reset();
     },
   });
 
@@ -64,7 +73,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
 
     formData.append("avatar", data.avatar);
 
-    mutation.mutate(formData);
+    mutate(formData);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

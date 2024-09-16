@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import CreateAgentForm from "./CreateAgentForm";
 
-import { Button } from "./ui/button";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 const CreateAgentModal = () => {
   const [open, setOpen] = React.useState(false);
@@ -20,13 +20,18 @@ const CreateAgentModal = () => {
     e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
+
     setOpen(false);
   };
   return (
     <>
-      <Button type="button" onClick={openModal}>
-        Open Modal
-      </Button>
+      <button
+        className="h-[42px] w-full flex justify-start items-center gap-3 border-b m border-[#808A93 p-2.5"
+        onClick={openModal}
+      >
+        <IoIosAddCircleOutline className="w-[20px] h-[20px]" />
+        <p>Open Modal</p>
+      </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="  flex flex-col items-center  ">
           <DialogTitle className="text-3xl mt-[87px] mb-[61px]">

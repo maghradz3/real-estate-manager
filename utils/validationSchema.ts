@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { union, z } from "zod";
 export const realEstateSchema = z.object({
   address: z
     .string()
@@ -11,8 +11,8 @@ export const realEstateSchema = z.object({
       (file) => ["image/jpeg", "image/png"].includes(file.type),
       "მხოლოდ JPG ან PNG ფორმატის სურათი"
     ),
-  region: z.string().nonempty("რეგიონი სავალდებულოა "),
-  city: z.string().nonempty("ქალაქი სავალდებულოა"),
+  region_id: z.string().nonempty("რეგიონი სავალდებულოა "),
+  city_id: z.string().nonempty("ქალაქი სავალდებულოა"),
   zip_code: z
     .string()
     .regex(/^\d+$/, "მხოლოდ რიცხვები")
@@ -23,7 +23,7 @@ export const realEstateSchema = z.object({
     .nonempty("ფასი სავალდებულოა"),
   area: z
     .string()
-    .regex(/^\d+$/, "მხოლოდ რიცხვები")
+    .regex(/^\d+(\.\d+)?$/, "მხოლოდ რიცხვები")
     .nonempty("ფართი სავალდებულოა"),
   bedrooms: z
     .string()
@@ -33,8 +33,11 @@ export const realEstateSchema = z.object({
     .string()
     .min(5, "მინიმუმ 5 სიტყვა")
     .nonempty("აღწერა სავალდებულოა"),
-  is_rental: z.string().nonempty("აირჩიეთ იყიდება თუ ქირავდება"),
-  agent: z.string().nonempty("აგენტი სავალდებულოა"),
+  is_rental: union([z.literal("0"), z.literal("1")]).refine(
+    (val) => val !== undefined,
+    "აირჩიეთ იყიდება თუ ქირავდება"
+  ),
+  agent_id: z.string().nonempty("აგენტი სავალდებულოა"),
 });
 
 export const agentSchema = z.object({

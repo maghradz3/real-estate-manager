@@ -19,7 +19,26 @@ body {
   }
 
   .input_default {
-    @apply h-[42px] rounded-md p-[10x]
+    @apply h-[42px] rounded-md p-2.5 w-[384px]
+  }
+
+  .text_default {
+    @apply font-normal text-black-1
+  }
+}
+
+@layer components {
+  .radio-custom {
+    @apply appearance-none w-4 h-4 border border-black rounded-full relative cursor-pointer;
+  }
+
+  .radio-custom:checked {
+    @apply bg-white;
+  }
+
+  .radio-custom:checked::before {
+    content: "";
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-black rounded-full;
   }
 }
 
