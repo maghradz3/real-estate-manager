@@ -65,3 +65,12 @@ export interface getRealEstate {
   city: getCity;
   agent: getAgent;
 }
+
+export type FilterValues = {
+  minPrice: number | null;
+  maxPrice: number | null;
+  selectedRegions: number[];
+  minArea: number | null;
+  maxArea: number | null;
+  bedrooms: number | null;
+};
