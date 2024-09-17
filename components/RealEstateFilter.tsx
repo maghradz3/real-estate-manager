@@ -1,7 +1,8 @@
+"use client";
 import { getAllRegions } from "@/utils/action";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import CreateAgentModal from "./CreateAgentModal";
 
@@ -9,7 +10,14 @@ import {
   DropdownMenuTrigger,
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
 } from "./ui/dropdown-menu";
+import PriceDropdown from "./FilterDropDown";
+import RangeDropDown from "./FilterDropDown";
+import { IoIosArrowDown } from "react-icons/io";
+import arrowClass from "@/helpers/arrowClass";
+import { cn } from "@/lib/utils";
+import { Checkbox } from "./ui/checkbox";
 
 interface FilterProps {
   onFilterChange: (filters: FilterValues) => void;
@@ -31,6 +39,8 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
   const [minArea, setMinArea] = useState<number | null>(null);
   const [maxArea, setMaxArea] = useState<number | null>(null);
   const [bedrooms, setBedrooms] = useState<number | null>(null);
+  const [openRegion, setOpenRegion] = useState(false);
+  const [openBedroom, setOpenBedroom] = useState(false);
 
   const { data: regions } = useQuery({
     queryKey: ["regions"],
@@ -56,107 +66,141 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     });
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onFilterChange({
+        minPrice,
+        maxPrice,
+        selectedRegions,
+        minArea,
+        maxArea,
+        bedrooms,
+      });
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [
+    onFilterChange,
+    minPrice,
+    maxPrice,
+    selectedRegions,
+    minArea,
+    maxArea,
+    bedrooms,
+  ]);
+
+  const minPriceList = [5000, 10000, 15000];
+  const maxPriceList = [20000, 30000, 40000];
+
+  const minAreaList = [50, 100, 150];
+  const maxAreaList = [200, 300, 400];
+
+  const bedroomsList = [1, 2, 3, 4, 5];
+
+  const isActive = true;
+
   const regionName = regions?.find(
     (region) => region.id === selectedRegions[0]
   )?.name;
 
-  const selectedTags = setTimeout(() => {
-    return (
-      <p>
-        {minPrice} {maxPrice}
-        {selectedRegions}
-      </p>
-    );
-  }, 500);
-
   return (
     <div className="px-[162px] w-[1596px] border border-[#DBDBDB] mt-[80px] flex justify-between items-center">
-      <div className="flex border border-red-500  gap-4 mb-8">
-        <DropdownMenu>
-          <DropdownMenuTrigger>Regions</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <div className="flex flex-col">
-              {regions?.map((region) => (
-                <label key={region.id} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={selectedRegions.includes(region.id)}
-                    onChange={() => handleRegionChange(region.id)}
-                    className="mr-2"
-                  />
-                  {region.name}
-                </label>
-              ))}
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <div>
-          <label>Min Price</label>
-          <input
-            type="number"
-            value={minPrice || ""}
-            onChange={(e) => setMinPrice(Number(e.target.value) || null)}
-            placeholder="Min Price"
-            className="border p-2 rounded"
+      <div className="flex flex-col   gap-4 mb-8">
+        <div className="flex justify-center items-center gap-6 w-[785px] h-12 p-2.5  border border-red-500 ">
+          <DropdownMenu open={openRegion} onOpenChange={setOpenRegion}>
+            <DropdownMenuTrigger className=" filter_Btn  flex justify-center items-center gap-1">
+              რეგიონი
+              <span>
+                <IoIosArrowDown className={arrowClass(openRegion)} />
+              </span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className=" flex flex-col items-center gap-3 p-6 border-md">
+              <h1 className="text_default text-base font-bold self-start">
+                რეგიონის მიხედვით
+              </h1>
+              <div className="grid grid-cols-3 grid-rows-4 gap-x-12 gap-y-4 ">
+                {regions?.map((region) => (
+                  <label key={region.id} className="flex items-center">
+                    <Checkbox
+                      checked={selectedRegions.includes(region.id)}
+                      onCheckedChange={() => handleRegionChange(region.id)}
+                      className="mr-2 w-4 h-4 rounded border-gray-300 text-white checked:bg-green-500 checked:border-transparent focus:ring-green-500"
+                    />
+                    {region.name}
+                  </label>
+                ))}
+              </div>
+              <Button variant="destructive" className="self-end mt-2">
+                არჩევა
+              </Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <RangeDropDown
+            minValue={minPrice}
+            maxValue={maxPrice}
+            setMinValue={setMinPrice}
+            setMaxValue={setMaxPrice}
+            minList={minPriceList}
+            maxList={maxPriceList}
+            label="ფასი"
           />
-        </div>
-        <div>
-          <label>Max Price</label>
-          <input
-            type="number"
-            value={maxPrice || ""}
-            onChange={(e) => setMaxPrice(Number(e.target.value) || null)}
-            placeholder="Max Price"
-            className="border p-2 rounded"
-          />
-        </div>
 
-        <div>
-          <label>Min Area (m²)</label>
-          <input
-            type="number"
-            value={minArea || ""}
-            onChange={(e) => setMinArea(Number(e.target.value) || null)}
-            placeholder="Min Area"
-            className="border p-2 rounded"
+          <RangeDropDown
+            minValue={minArea}
+            maxValue={maxArea}
+            setMinValue={setMinArea}
+            setMaxValue={setMaxArea}
+            minList={minAreaList}
+            maxList={maxAreaList}
+            label="ფართობი"
           />
-        </div>
-        <div>
-          <label>Max Area (m²)</label>
-          <input
-            type="number"
-            value={maxArea || ""}
-            onChange={(e) => setMaxArea(Number(e.target.value) || null)}
-            placeholder="Max Area"
-            className="border p-2 rounded"
-          />
-        </div>
-        <div>
-          <label>Bedrooms</label>
-          <select
-            value={bedrooms || ""}
-            onChange={(e) => setBedrooms(Number(e.target.value) || null)}
-            className="border p-2 rounded"
+          <DropdownMenu open={openBedroom} onOpenChange={setOpenBedroom}>
+            <DropdownMenuTrigger className="filter_Btn flex justify-center items-center gap-1">
+              საძინებლების რაოდენობა
+              <span>
+                <IoIosArrowDown className={arrowClass(openBedroom)} />
+              </span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <div className="flex flex-col justify-start items-center gap-5 p-2.5">
+                <div className="flex justify-start items-center gap-5">
+                  {bedroomsList.map((bedroom) => (
+                    <Button
+                      className={cn(
+                        "border border-black-1 text-black-1 hover:bg-black-1 hover:text-white",
+                        {
+                          "bg-black-1 text-white": bedrooms === bedroom,
+                        }
+                      )}
+                      size="icon"
+                      key={bedroom}
+                      onClick={() => setBedrooms(bedroom)}
+                    >
+                      {bedroom}
+                    </Button>
+                  ))}
+                </div>
+                <Button variant="destructive" className="self-end">
+                  არჩევა
+                </Button>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {/* <button
+            onClick={applyFilters}
+            className="bg-blue-500 text-white p-2 rounded"
           >
-            <option value="">Select Bedrooms</option>
-            <option value="1">1 Bedroom</option>
-            <option value="2">2 Bedrooms</option>
-            <option value="3">3 Bedrooms</option>
-            <option value="4">4 Bedrooms</option>
-            <option value="5">5 Bedrooms</option>
-          </select>
+            Apply Filters
+          </button> */}
         </div>
-        <button
-          onClick={applyFilters}
-          className="bg-blue-500 text-white p-2 rounded"
-        >
-          Apply Filters
-        </button>
-        <p className="border border-red-500">
-          {maxPrice}
-          {regionName}
-        </p>
+        <div>
+          <p className="border border-red-500 ">
+            {minPrice}
+            {maxPrice}
+            {regionName}
+          </p>
+        </div>
       </div>
+
       <div className="flex justify-center items-center gap-3">
         <Link href="/add-estate">
           <Button className="h-[47px]" variant="destructive">

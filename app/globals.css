@@ -25,6 +25,10 @@ body {
   .text_default {
     @apply font-normal text-black-1
   }
+
+  .filter_Btn {
+    @apply text-black-1 hover:bg-[#F3F3F3] transition-all ease-in duration-200 p-2.5 rounded-md
+  }
 }
 
 @layer components {
