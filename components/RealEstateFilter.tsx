@@ -17,6 +17,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import arrowClass from "@/helpers/arrowClass";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
+import { set } from "zod";
+import { FIlterSkeleton, RealEstateListingSkeleton } from "./FIlterSkeleton";
 
 interface FilterProps {
   onFilterChange: (filters: FilterValues) => void;
@@ -42,11 +44,30 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
   const [bedrooms, setBedrooms] = useState<number | null>(null);
   const [openRegion, setOpenRegion] = useState(false);
   const [openBedroom, setOpenBedroom] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { data: regions } = useQuery({
     queryKey: ["regions"],
     queryFn: () => getAllRegions(),
   });
+
+  useEffect(() => {
+    const savedFilters = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedFilters) {
+      console.log(loading);
+      const parsedFilters = JSON.parse(savedFilters);
+      setMinPrice(parsedFilters.minPrice || null);
+      setMaxPrice(parsedFilters.maxPrice || null);
+      setSelectedRegions(parsedFilters.selectedRegions || []);
+      setMinArea(parsedFilters.minArea || null);
+      setMaxArea(parsedFilters.maxArea || null);
+      setBedrooms(parsedFilters.bedrooms || null);
+      applyFilters(parsedFilters);
+    }
+    setLoading(false);
+  }, []);
+
+  console.log(loading);
 
   const handleRegionChange = (region: number) => {
     setSelectedRegions((prev) =>
@@ -65,12 +86,17 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     bedrooms: null,
   });
 
+  const saveFiltersToLocalStorage = (filters: FilterValues) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filters));
+  };
+
   const applyFilters = (filters: Partial<FilterValues>) => {
     const newFilters = {
       ...appliedFilters,
       ...filters,
     };
     setAppliedFilters(newFilters);
+    saveFiltersToLocalStorage(newFilters);
     onFilterChange(newFilters);
   };
 
@@ -161,6 +187,7 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
       )
     );
   };
+  if (loading) return <FIlterSkeleton />;
 
   return (
     <div className="w-full flex flex-col gap-3 ">
@@ -249,7 +276,10 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
                   ))}
                 </div>
                 <Button
-                  onClick={() => applyFilters({ bedrooms })}
+                  onClick={() => {
+                    applyFilters({ bedrooms });
+                    setOpenBedroom(false);
+                  }}
                   variant="destructive"
                   className="self-end"
                 >

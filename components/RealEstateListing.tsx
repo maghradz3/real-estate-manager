@@ -11,6 +11,7 @@ import { BsSignpostFill } from "react-icons/bs";
 import Link from "next/link";
 import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
+import { RealEstateListingSkeleton } from "./FIlterSkeleton";
 
 const RealEstateListing = () => {
   const { data, isLoading } = useQuery({
@@ -59,11 +60,15 @@ const RealEstateListing = () => {
     );
   });
 
+  if (isLoading) {
+    return <RealEstateListingSkeleton />;
+  }
+
   return (
     <>
       <RealEstateFilter onFilterChange={handleFilterChange} />
 
-      <div className=" grid grid-cols-3 gap-3  2xl:grid xl:grid-cols-4 xl:gap-5  ">
+      <div className=" w-full grid grid-cols-3 gap-3  2xl:grid xl:grid-cols-4 xl:gap-5  ">
         {filteredData?.map((estate) => (
           <Card key={estate.id}>
             <Link href={`/real-estate/${estate.id}`}>
