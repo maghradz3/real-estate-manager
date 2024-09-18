@@ -20,7 +20,9 @@ const page = async ({ params }: { params: Params }) => {
   console.log(params);
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DetailRealEstate id={params.id} />
+      <div className="w-full px-[122px]">
+        <DetailRealEstate id={params.id} />
+      </div>
     </HydrationBoundary>
   );
 };

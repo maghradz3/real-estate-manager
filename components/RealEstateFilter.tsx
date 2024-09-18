@@ -14,7 +14,7 @@ import {
 
 import RangeDropDown from "./FilterDropDown";
 import { IoIosArrowDown } from "react-icons/io";
-import arrowClass from "@/helpers/arrowClass";
+import { arrowClass } from "@/helpers/reuseableClasses";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
 import { set } from "zod";

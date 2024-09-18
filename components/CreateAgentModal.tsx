@@ -33,7 +33,7 @@ const CreateAgentModal = () => {
         <p>დაამატეთ აგენტი</p>
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="  flex flex-col items-center  ">
+        <DialogContent className=" w-[1009px] h-[784px] flex flex-col items-center  ">
           <DialogTitle className="text-3xl mt-[87px] mb-[61px]">
             აგენტის დამატება
           </DialogTitle>

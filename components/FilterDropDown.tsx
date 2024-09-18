@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import arrowClass from "@/helpers/arrowClass";
+import {arrowClass} from "@/helpers/reuseableClasses";
 import { IoIosArrowDown } from "react-icons/io";
 
 type RangeDropdownProps = {
