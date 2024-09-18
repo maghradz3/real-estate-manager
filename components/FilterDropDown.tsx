@@ -11,6 +11,7 @@ import arrowClass from "@/helpers/arrowClass";
 import { IoIosArrowDown } from "react-icons/io";
 
 type RangeDropdownProps = {
+  applyPriceFilters: (minPrice: number | null, maxPrice: number | null) => void;
   minValue: number | null;
   maxValue: number | null;
   setMinValue: (value: number | null) => void;
@@ -22,6 +23,8 @@ type RangeDropdownProps = {
 
 const RangeDropDown: React.FC<RangeDropdownProps> = ({
   minValue,
+  applyPriceFilters,
+
   maxValue,
   setMinValue,
   setMaxValue,
@@ -30,10 +33,20 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
   label,
 }) => {
   const [open, setOpen] = useState(false);
+  const handleChooseClick = () => {
+    if (minValue && maxValue && minValue > maxValue) {
+      alert("მინიმალური მეტია მაქსიმალუმზე");
+      return;
+    }
+
+    applyPriceFilters(minValue, maxValue);
+
+    setOpen(false);
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger className="filter_Btn flex justify-center items-center gap-1">
+      <DropdownMenuTrigger className="filter_Btn flex justify-center items-center gap-2">
         {label}
         <span>
           <IoIosArrowDown className={arrowClass(open)} />
@@ -90,7 +103,7 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
         </div>
 
         <Button
-          onClick={() => setOpen(false)}
+          onClick={handleChooseClick}
           variant="destructive"
           className="self-end"
         >

@@ -9,9 +9,8 @@ import { IoBedSharp } from "react-icons/io5";
 import { TbRulerMeasure } from "react-icons/tb";
 import { BsSignpostFill } from "react-icons/bs";
 import Link from "next/link";
-import { getRealEstate, RealEstate } from "@/utils/types";
+import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
-import Filter from "./Filter";
 
 const RealEstateListing = () => {
   const { data, isLoading } = useQuery({
@@ -64,11 +63,11 @@ const RealEstateListing = () => {
     <>
       <RealEstateFilter onFilterChange={handleFilterChange} />
 
-      <div className="w-[1596px]   grid grid-cols-4 gap-5 ">
+      <div className=" grid grid-cols-3 gap-3  2xl:grid xl:grid-cols-4 xl:gap-5  ">
         {filteredData?.map((estate) => (
-          <Card className="h-[455px]" key={estate.id}>
+          <Card key={estate.id}>
             <Link href={`/real-estate/${estate.id}`}>
-              <div className="relative w-[384px] h-[307px] overflow-hidden">
+              <div className="relative overflow-hidden">
                 <Image
                   src={estate.image}
                   alt="appartment image"
@@ -85,7 +84,7 @@ const RealEstateListing = () => {
                   }`}</p>
                 </div>
               </div>
-              <div className="h-[148px] py-5 px-6 flex flex-col justify-start items-start gap-1.5">
+              <div className="py-5 px-6 flex flex-col justify-start items-start gap-1.5 ">
                 <h1 className="font-bold text-[28px] ">{estate.price} ₾</h1>
                 <p className="flex justify-center items-center gap-1 text-[#02152680]">
                   <span>
@@ -93,7 +92,7 @@ const RealEstateListing = () => {
                   </span>
                   {estate.address}
                 </p>
-                <div className="flex justify-center items-center gap-8 mt-5">
+                <div className="flex justify-center items-center gap-7 mt-5">
                   <p className="flex justify-center items-center gap-1 text-[#02152680]">
                     <IoBedSharp /> {estate.bedrooms}
                   </p>

@@ -10,9 +10,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
 } from "./ui/dropdown-menu";
-import PriceDropdown from "./FilterDropDown";
+
 import RangeDropDown from "./FilterDropDown";
 import { IoIosArrowDown } from "react-icons/io";
 import arrowClass from "@/helpers/arrowClass";
@@ -31,6 +30,8 @@ type FilterValues = {
   maxArea: number | null;
   bedrooms: number | null;
 };
+
+const LOCAL_STORAGE_KEY = "realEstateFilters";
 
 const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
   const [minPrice, setMinPrice] = useState<number | null>(null);
@@ -55,38 +56,42 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     );
   };
 
-  const applyFilters = () => {
-    onFilterChange({
-      minPrice,
-      maxPrice,
-      selectedRegions,
-      minArea,
-      maxArea,
-      bedrooms,
-    });
+  const [appliedFilters, setAppliedFilters] = useState<FilterValues>({
+    minPrice: null,
+    maxPrice: null,
+    selectedRegions: [],
+    minArea: null,
+    maxArea: null,
+    bedrooms: null,
+  });
+
+  const applyFilters = (filters: Partial<FilterValues>) => {
+    const newFilters = {
+      ...appliedFilters,
+      ...filters,
+    };
+    setAppliedFilters(newFilters);
+    onFilterChange(newFilters);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onFilterChange({
-        minPrice,
-        maxPrice,
-        selectedRegions,
-        minArea,
-        maxArea,
-        bedrooms,
-      });
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [
-    onFilterChange,
-    minPrice,
-    maxPrice,
-    selectedRegions,
-    minArea,
-    maxArea,
-    bedrooms,
-  ]);
+  const applyPriceFilters = (
+    minValue: number | null,
+    maxValue: number | null
+  ) => {
+    applyFilters({ minPrice: minValue, maxPrice: maxValue });
+  };
+
+  const applyAreaFilters = (
+    minValue: number | null,
+    maxValue: number | null
+  ) => {
+    applyFilters({ minArea: minValue, maxArea: maxValue });
+  };
+
+  console.log(appliedFilters.minPrice);
+  console.log(bedrooms);
+  console.log(appliedFilters.bedrooms);
+  console.log(minPrice);
 
   const minPriceList = [5000, 10000, 15000];
   const maxPriceList = [20000, 30000, 40000];
@@ -96,18 +101,73 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
 
   const bedroomsList = [1, 2, 3, 4, 5];
 
-  const isActive = true;
+  const selectedRegionsName = regions?.filter((region) =>
+    selectedRegions.includes(region.id)
+  );
 
-  const regionName = regions?.find(
-    (region) => region.id === selectedRegions[0]
-  )?.name;
+  const selectedValueName = (
+    value1: number | null,
+    value2: number | null,
+    symbol: string
+  ) => {
+    const selectedValueName =
+      value1 && value2
+        ? `${value1}${symbol} - ${value2}${symbol}`
+        : value1
+        ? `min - ${value1}${symbol}`
+        : value2
+        ? `max - ${value2}${symbol}`
+        : null;
+    return selectedValueName;
+  };
+  const removeFilter = (filterType: keyof FilterValues) => {
+    const updatedFilters = { ...appliedFilters };
+
+    if (filterType === "selectedRegions") {
+      updatedFilters.selectedRegions = [];
+      selectedRegions.length = 0;
+    } else if (filterType === "minPrice" || filterType === "maxPrice") {
+      updatedFilters.minPrice = null;
+      updatedFilters.maxPrice = null;
+      setMinPrice(null);
+      setMaxPrice(null);
+    } else if (filterType === "minArea" || filterType === "maxArea") {
+      updatedFilters.minArea = null;
+      updatedFilters.maxArea = null;
+      setMinArea(null);
+      setMaxArea(null);
+    } else if (filterType === "bedrooms") {
+      updatedFilters.bedrooms = null;
+      setBedrooms(null);
+    }
+
+    applyFilters(updatedFilters);
+  };
+
+  const filterTags = (tagValue: any, filterType?: string) => {
+    return (
+      tagValue && (
+        <span className="flex justify-center items-center gap-2 rounded-[43px] border shadow px-2.5 py-1.5 font-sm text-[#021526CC] ">
+          {tagValue}
+          <button
+            onClick={() =>
+              filterType && removeFilter(filterType as keyof FilterValues)
+            }
+            className=" text-[#021526CC]"
+          >
+            x
+          </button>
+        </span>
+      )
+    );
+  };
 
   return (
-    <div className="px-[162px] w-[1596px] border border-[#DBDBDB] mt-[80px] flex justify-between items-center">
-      <div className="flex flex-col   gap-4 mb-8">
-        <div className="flex justify-center items-center gap-6 w-[785px] h-12 p-2.5  border border-red-500 ">
+    <div className="w-full flex flex-col gap-3 ">
+      <div className="   mt-[80px] flex justify-between items-center">
+        <div className="flex justify-start gap-6 items-center    shadow border rounded-md ">
           <DropdownMenu open={openRegion} onOpenChange={setOpenRegion}>
-            <DropdownMenuTrigger className=" filter_Btn  flex justify-center items-center gap-1">
+            <DropdownMenuTrigger className=" filter_Btn  flex justify-center items-center gap-2 ">
               რეგიონი
               <span>
                 <IoIosArrowDown className={arrowClass(openRegion)} />
@@ -129,12 +189,20 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
                   </label>
                 ))}
               </div>
-              <Button variant="destructive" className="self-end mt-2">
+              <Button
+                onClick={() => {
+                  applyFilters({ selectedRegions });
+                  setOpenRegion(false);
+                }}
+                variant="destructive"
+                className="self-end mt-2"
+              >
                 არჩევა
               </Button>
             </DropdownMenuContent>
           </DropdownMenu>
           <RangeDropDown
+            applyPriceFilters={applyPriceFilters}
             minValue={minPrice}
             maxValue={maxPrice}
             setMinValue={setMinPrice}
@@ -145,6 +213,7 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
           />
 
           <RangeDropDown
+            applyPriceFilters={applyAreaFilters}
             minValue={minArea}
             maxValue={maxArea}
             setMinValue={setMinArea}
@@ -154,7 +223,7 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
             label="ფართობი"
           />
           <DropdownMenu open={openBedroom} onOpenChange={setOpenBedroom}>
-            <DropdownMenuTrigger className="filter_Btn flex justify-center items-center gap-1">
+            <DropdownMenuTrigger className="filter_Btn flex justify-center items-center gap-2">
               საძინებლების რაოდენობა
               <span>
                 <IoIosArrowDown className={arrowClass(openBedroom)} />
@@ -179,37 +248,55 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
                     </Button>
                   ))}
                 </div>
-                <Button variant="destructive" className="self-end">
+                <Button
+                  onClick={() => applyFilters({ bedrooms })}
+                  variant="destructive"
+                  className="self-end"
+                >
                   არჩევა
                 </Button>
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* <button
-            onClick={applyFilters}
-            className="bg-blue-500 text-white p-2 rounded"
-          >
-            Apply Filters
-          </button> */}
         </div>
-        <div>
-          <p className="border border-red-500 ">
-            {minPrice}
-            {maxPrice}
-            {regionName}
-          </p>
+
+        <div className="flex justify-center items-center gap-3">
+          <Link href="/add-estate">
+            <Button className="h-[47px]" variant="destructive">
+              + ლისტრინგის დამატება
+            </Button>
+          </Link>
+          <span className="border border-default-primary text-default-primary hover:text-white hover:bg-default-primary rounded-md ">
+            <CreateAgentModal />
+          </span>
         </div>
       </div>
-
-      <div className="flex justify-center items-center gap-3">
-        <Link href="/add-estate">
-          <Button className="h-[47px]" variant="destructive">
-            + ლისტრინგის დამატება
-          </Button>
-        </Link>
-        <span className="border border-default-primary text-default-primary hover:text-white hover:bg-default-primary rounded-md ">
-          <CreateAgentModal />
-        </span>
+      <div className="w-full self-start flex justify-start items-start ">
+        <div className="flex justify-center items-start gap-1">
+          {selectedRegionsName?.map((region) => (
+            <span
+              className=" flex justify-center items-center gap-2 rounded-[43px] border shadow px-2.5 py-1.5 font-sm text-[#021526CC] "
+              key={region.id}
+            >
+              {region.name}
+              <button
+                onClick={() => removeFilter("selectedRegions")}
+                className="text-[#021526CC]"
+              >
+                x
+              </button>
+            </span>
+          ))}
+        </div>
+        {filterTags(
+          selectedValueName(minPrice, maxPrice, "₾"),
+          "minPrice" || "maxPrice"
+        )}
+        {filterTags(
+          selectedValueName(minArea, maxArea, "m²"),
+          "minArea" || "maxArea"
+        )}
+        {filterTags(bedrooms, "bedrooms")}
       </div>
     </div>
   );

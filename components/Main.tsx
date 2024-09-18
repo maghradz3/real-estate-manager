@@ -16,7 +16,7 @@ const Main = () => {
   //   });
 
   return (
-    <div className="flex flex-col justify-center items-center gap-8">
+    <div className="flex flex-col justify-center items-center gap-8  px-[162px]">
       <RealEstateListing />
     </div>
   );

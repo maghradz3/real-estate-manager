@@ -17,6 +17,7 @@ const config: Config = {
         "default-primary": "#F93B1D",
         "destructive-primary": "#DF3014",
         "black-1": "#1A1A1F",
+        "black-2": "#021526",
 
         card: {
           DEFAULT: "hsl(var(--card))",
