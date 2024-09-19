@@ -17,7 +17,7 @@ const RealEstateCard = ({ estate }: RealEstateCardProps) => {
     <>
       <Card key={estate?.id}>
         <Link href={`/real-estate/${estate?.id}`}>
-          <div className="relative overflow-hidden  h-[307px]">
+          <div className=" relative overflow-hidden max-w-[384px]  h-[307px]">
             <Image
               src={estate?.image || "/path/to/default/image.jpg"}
               alt="appartment image"

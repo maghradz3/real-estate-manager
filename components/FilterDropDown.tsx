@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import {arrowClass} from "@/helpers/reuseableClasses";
+import { arrowClass } from "@/helpers/reuseableClasses";
 import { IoIosArrowDown } from "react-icons/io";
 
 type RangeDropdownProps = {
@@ -33,11 +33,16 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
   label,
 }) => {
   const [open, setOpen] = useState(false);
+  const [validateError, setValidateError] = useState<string | null>(null);
   const handleChooseClick = () => {
     if (minValue && maxValue && minValue > maxValue) {
-      alert("მინიმალური მეტია მაქსიმალუმზე");
+      setValidateError(
+        `მინიმალური ${label} არ უნდა იყოს მეტი მაქსიმალურ ${label}-ზე.`
+      );
       return;
     }
+
+    setValidateError(null);
 
     applyPriceFilters(minValue, maxValue);
 
@@ -55,7 +60,6 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
       <DropdownMenuContent className="flex flex-col p-2.5">
         <h1>{`${label} მიხედვით`}</h1>
         <div className="flex justify-center items-center gap-3">
-          {/* Min Value Section */}
           <div>
             <input
               type="number"
@@ -78,7 +82,6 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
             </div>
           </div>
 
-          {/* Max Value Section */}
           <div>
             <input
               type="number"
@@ -101,7 +104,9 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
             </div>
           </div>
         </div>
-
+        {validateError && (
+          <p className="text-destructive-primary">{validateError}</p>
+        )}
         <Button
           onClick={handleChooseClick}
           variant="destructive"
