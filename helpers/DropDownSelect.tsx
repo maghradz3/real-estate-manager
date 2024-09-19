@@ -24,27 +24,16 @@ const DropDownSelect = ({
   optionsCity,
   onChange,
   label,
-  multiSelect,
 }: DropdownSelectProps) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+
   const [isOpen, setIsOpen] = useState(false);
   const generalOptions = forCities ? optionsCity : optionsRegion;
 
   const handleSelect = (id: number) => {
-    if (multiSelect) {
-      if (selectedOptions.includes(id)) {
-        setSelectedOptions((prev) =>
-          prev.filter((optionId) => optionId !== id)
-        );
-      } else {
-        setSelectedOptions((prev) => [...prev, id]);
-      }
-    } else {
-      setSelectedOption(id);
-      onChange(id);
-      setIsOpen(true);
-    }
+    setSelectedOption(id);
+    onChange(id);
+    setIsOpen(true);
   };
 
   return (
@@ -58,22 +47,15 @@ const DropDownSelect = ({
         }}
       >
         <div>
-          {multiSelect
-            ? selectedOptions
-                .map((id) => generalOptions?.find((opt) => opt.id === id)?.name)
-                .join(", ") || "არჩევა"
-            : generalOptions?.find((opt) => opt.id === selectedOption)?.name ||
-              "რეგიონი"}
+          {generalOptions?.find((opt) => opt.id === selectedOption)?.name ||
+            "რეგიონი"}
           <span className="ml-2">
             <IoIosArrowDown />
           </span>
         </div>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        side="bottom"
-        className="flex flex-col gap-5 border border-blue-400"
-      >
+      <DropdownMenuContent side="bottom" className="flex flex-col gap-5 p-2.5 ">
         <h1
           className="mb-[24px] text-base text-black font-bold
 "
@@ -87,11 +69,7 @@ const DropDownSelect = ({
               className=" flex gap-2 justify-start items-center p-2 hover:bg-gray-200 "
             >
               <Checkbox
-                checked={
-                  multiSelect
-                    ? selectedOptions.includes(option.id)
-                    : selectedOption === option.id
-                }
+                checked={selectedOption === option.id}
                 onCheckedChange={() => handleSelect(option.id)}
               />
               <span className="text-sm">{option.name}</span>

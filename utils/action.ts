@@ -51,7 +51,7 @@ export const deleteRealEstateById = async (id: number) => {
   }
 };
 
-export const getAllRegions = async (): Promise<Region[]|undefined> => {
+export const getAllRegions = async (): Promise<Region[] | undefined> => {
   try {
     const { data } = await axios.get<Region[]>(
       "https://api.real-estate-manager.redberryinternship.ge/api/regions",

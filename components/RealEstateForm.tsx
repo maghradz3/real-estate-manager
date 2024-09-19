@@ -26,12 +26,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { IoIosArrowDown } from "react-icons/io";
 import { Agents } from "@/utils/types";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const LOCAL_STORAGE_KEY = "realEstateFormData";
 
@@ -57,6 +57,7 @@ const RealEstateForm = () => {
 
   const [selectedAgent, setSelectedAgent] = useState<number | null>(null);
   const router = useRouter();
+  const { toast } = useToast();
 
   const {
     register,
@@ -80,7 +81,7 @@ const RealEstateForm = () => {
       city_id: "",
     },
   });
-console.log(selectedCity)
+  console.log(selectedCity);
   const isRentalValue = watch("is_rental", "0");
   useEffect(() => {
     const subscription = watch((formValues) => {
@@ -106,9 +107,18 @@ console.log(selectedCity)
     onSuccess: () => {
       console.log("success");
       router.push("/");
+      toast({
+        description: "ახალი ლისტი წარმატებით შეიქმნა",
+        duration: 5000,
+      });
     },
     onError: (error) => {
       console.error("Error creating real estate:", error);
+      toast({
+        variant: "destructive",
+        description: "ლისტის დამატების დროს მოხდა შეცდომა",
+        duration: 3000,
+      });
     },
   });
 
@@ -145,6 +155,7 @@ console.log(selectedCity)
     formData.append("agent_id", data.agent_id);
 
     mutate(formData);
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
   return (
@@ -348,7 +359,13 @@ console.log(selectedCity)
           </div>
         </div>
         <div className="self-end  flex justify-center items-center gap-3.5 my-20">
-          <Button variant="default">გაუქმება</Button>
+          <Button
+            type="button"
+            variant="default"
+            onClick={() => router.push("/")}
+          >
+            გაუქმება
+          </Button>
           <Button variant="destructive" type="submit">
             Submit
           </Button>

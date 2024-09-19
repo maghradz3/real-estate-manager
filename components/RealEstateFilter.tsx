@@ -51,8 +51,6 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     queryFn: () => getAllRegions(),
   });
 
-  console.log(loading);
-
   const handleRegionChange = (region: number) => {
     setSelectedRegions((prev) =>
       prev.includes(region)

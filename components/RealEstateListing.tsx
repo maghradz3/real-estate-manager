@@ -6,12 +6,22 @@ import React, { useState } from "react";
 import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
 import RealEstateCard from "./RealEstateCard";
+import { RealEstateSkeleton } from "./FIlterSkeleton";
 
 const RealEstateListing = () => {
-  const { data } = useQuery({
+  const { data, isError, error, isLoading, isFetching } = useQuery({
     queryKey: ["real-estates"],
     queryFn: () => getAllRealEstates(),
+    staleTime: 1000 * 60 * 5,
   });
+
+  if (isLoading) {
+    return (
+      <div>
+        <RealEstateSkeleton />
+      </div>
+    );
+  }
 
   const [filters, setFilters] = useState<{
     minPrice: number | null;
@@ -74,7 +84,19 @@ const RealEstateListing = () => {
     );
   });
 
-  console.log(filteredData);
+  if (isLoading || isFetching) {
+    return (
+      <div>
+        <RealEstateSkeleton />
+      </div>
+    );
+  }
+
+  console.log(isError, error);
+
+  if (error) {
+    return <div>Something went wrong. Please try again later.</div>;
+  }
 
   return (
     <>
