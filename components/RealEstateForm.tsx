@@ -80,7 +80,7 @@ const RealEstateForm = () => {
       city_id: "",
     },
   });
-
+console.log(selectedCity)
   const isRentalValue = watch("is_rental", "0");
   useEffect(() => {
     const subscription = watch((formValues) => {

@@ -6,7 +6,7 @@ import { MdLocationPin } from "react-icons/md";
 import { IoBedSharp } from "react-icons/io5";
 import { TbRulerMeasure } from "react-icons/tb";
 import { BsSignpostFill } from "react-icons/bs";
-import { getRealEstate, RealEstate } from "@/utils/types";
+import { RealEstate } from "@/utils/types";
 
 interface RealEstateCardProps {
   estate: RealEstate | undefined;

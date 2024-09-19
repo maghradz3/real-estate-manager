@@ -1,11 +1,6 @@
 "use client";
 import React from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import CreateAgentForm from "./CreateAgentForm";
 
 import { IoIosAddCircleOutline } from "react-icons/io";

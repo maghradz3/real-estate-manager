@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import Image from "next/image";
 import {
-  QueryClient,
+ 
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
@@ -36,9 +36,9 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, touchedFields },
+    formState: { errors,  touchedFields },
     setValue,
-    watch,
+    
     reset,
   } = useForm<AgentFormValues>({
     resolver: zodResolver(agentSchema),
@@ -48,7 +48,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
   const queryClient = useQueryClient();
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+
 
   const { mutate } = useMutation({
     mutationFn: async (formData: FormData) => {

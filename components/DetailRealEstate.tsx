@@ -2,9 +2,9 @@
 import { deleteRealEstateById, getRealEstateById } from "@/utils/action";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Button } from "./ui/button";
+
 import { useRouter } from "next/navigation";
-import { number } from "zod";
+
 import Image from "next/image";
 import { MdLocationPin } from "react-icons/md";
 import IconText from "./IconText";
@@ -13,8 +13,7 @@ import { TbRulerMeasure } from "react-icons/tb";
 import { BsSignpost2Fill } from "react-icons/bs";
 import { CiMail } from "react-icons/ci";
 import { MdPhoneInTalk } from "react-icons/md";
-import { Dialog, DialogTrigger } from "./ui/dialog";
-import { DialogContent } from "@radix-ui/react-dialog";
+
 import EstateDeleteModal from "./EstateDeleteModal";
 import RealEstateCarousel from "./RealEstateCarousel";
 
@@ -31,7 +30,6 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
     queryKey: [id],
     queryFn: () => getRealEstateById(NumberId),
   });
-  const [open, setOpen] = useState<boolean>(false);
 
   const { mutate } = useMutation({
     mutationFn: async (id: number) => {

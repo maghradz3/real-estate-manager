@@ -11,10 +11,9 @@ import { BsSignpostFill } from "react-icons/bs";
 import Link from "next/link";
 import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
-import { RealEstateListingSkeleton } from "./FIlterSkeleton";
 
 const RealEstateListing = () => {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["real-estates"],
     queryFn: () => getAllRealEstates(),
   });

@@ -26,14 +26,6 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
   const itemsPerPage = 2;
   const totalItems = realEstatesByRegion?.length;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [currentIndex, totalItems]);
-
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex + itemsPerPage >= totalItems! ? 0 : prevIndex + itemsPerPage
@@ -48,9 +40,13 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
     );
   };
 
-  const totalSlides = Math.ceil(totalItems! / itemsPerPage);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
 
-  console.log(realEstatesByRegion);
+    return () => clearInterval(interval);
+  }, [currentIndex, totalItems, handleNext]);
 
   return (
     <>
@@ -74,7 +70,7 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
                 }%)`,
               }}
             >
-              {realEstatesByRegion?.map((estate, index) => (
+              {realEstatesByRegion?.map((estate) => (
                 <div key={estate.id} className="min-w-[25%] p-4">
                   <RealEstateCard estate={estate} />
                 </div>

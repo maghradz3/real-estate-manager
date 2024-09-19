@@ -17,8 +17,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { arrowClass } from "@/helpers/reuseableClasses";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
-import { set } from "zod";
-import { FIlterSkeleton, RealEstateListingSkeleton } from "./FIlterSkeleton";
+
+import { FIlterSkeleton } from "./FIlterSkeleton";
 
 interface FilterProps {
   onFilterChange: (filters: FilterValues) => void;
@@ -50,22 +50,6 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     queryKey: ["regions"],
     queryFn: () => getAllRegions(),
   });
-
-  useEffect(() => {
-    const savedFilters = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (savedFilters) {
-      console.log(loading);
-      const parsedFilters = JSON.parse(savedFilters);
-      setMinPrice(parsedFilters.minPrice || null);
-      setMaxPrice(parsedFilters.maxPrice || null);
-      setSelectedRegions(parsedFilters.selectedRegions || []);
-      setMinArea(parsedFilters.minArea || null);
-      setMaxArea(parsedFilters.maxArea || null);
-      setBedrooms(parsedFilters.bedrooms || null);
-      applyFilters(parsedFilters);
-    }
-    setLoading(false);
-  }, []);
 
   console.log(loading);
 
@@ -107,17 +91,28 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     applyFilters({ minPrice: minValue, maxPrice: maxValue });
   };
 
+  useEffect(() => {
+    const savedFilters = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedFilters) {
+      console.log(loading);
+      const parsedFilters = JSON.parse(savedFilters);
+      setMinPrice(parsedFilters.minPrice || null);
+      setMaxPrice(parsedFilters.maxPrice || null);
+      setSelectedRegions(parsedFilters.selectedRegions || []);
+      setMinArea(parsedFilters.minArea || null);
+      setMaxArea(parsedFilters.maxArea || null);
+      setBedrooms(parsedFilters.bedrooms || null);
+      applyFilters(parsedFilters);
+    }
+    setLoading(false);
+  }, []);
+
   const applyAreaFilters = (
     minValue: number | null,
     maxValue: number | null
   ) => {
     applyFilters({ minArea: minValue, maxArea: maxValue });
   };
-
-  console.log(appliedFilters.minPrice);
-  console.log(bedrooms);
-  console.log(appliedFilters.bedrooms);
-  console.log(minPrice);
 
   const minPriceList = [5000, 10000, 15000];
   const maxPriceList = [20000, 30000, 40000];
@@ -170,7 +165,10 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     applyFilters(updatedFilters);
   };
 
-  const filterTags = (tagValue: any, filterType?: string) => {
+  const filterTags = (
+    tagValue: string | null | number,
+    filterType?: string
+  ) => {
     return (
       tagValue && (
         <span className="flex justify-center items-center gap-2 rounded-[43px] border shadow px-2.5 py-1.5 font-sm text-[#021526CC] ">
