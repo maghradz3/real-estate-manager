@@ -19,12 +19,13 @@ type RangeDropdownProps = {
   minList: number[];
   maxList: number[];
   label: string;
+  icon: string;
 };
 
 const RangeDropDown: React.FC<RangeDropdownProps> = ({
   minValue,
   applyPriceFilters,
-
+  icon,
   maxValue,
   setMinValue,
   setMaxValue,
@@ -59,15 +60,18 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="flex flex-col p-2.5">
         <h1>{`${label} მიხედვით`}</h1>
-        <div className="flex justify-center items-center gap-3">
+        <div className="flex justify-center items-center gap-3 ">
           <div>
-            <input
-              type="number"
-              value={minValue || ""}
-              onChange={(e) => setMinValue(Number(e.target.value) || null)}
-              placeholder={`მინ.${label}`}
-              className="border p-2 rounded"
-            />
+            <div className="flex justify-center items-center relative ">
+              <input
+                type="number"
+                value={minValue || ""}
+                onChange={(e) => setMinValue(Number(e.target.value) || null)}
+                placeholder={`დან${icon}`}
+                className=" border relative p-2 rounded "
+              />
+              <span className="absolute right-5">{icon}</span>
+            </div>
             <p>მინ.{label}</p>
             <div className="flex flex-col">
               {minList.map((value) => (
@@ -83,13 +87,16 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
           </div>
 
           <div>
-            <input
-              type="number"
-              value={maxValue || ""}
-              onChange={(e) => setMaxValue(Number(e.target.value) || null)}
-              placeholder={`მაქს.${label}`}
-              className="border p-2 rounded"
-            />
+            <div className="flex justify-center items-center relative">
+              <input
+                type="number"
+                value={maxValue || ""}
+                onChange={(e) => setMaxValue(Number(e.target.value) || null)}
+                placeholder={`მდე`}
+                className="border  p-2 rounded"
+              />
+              <span className="absolute right-5">{icon}</span>
+            </div>
             <div className="flex flex-col">
               <p>მაქს.{label}</p>
               {maxList.map((value) => (

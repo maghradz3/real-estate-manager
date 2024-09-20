@@ -24,7 +24,7 @@ const EstateDeleteModal = ({ onSubmit }: EstateDeleteModalProps) => {
     <>
       <Button
         variant="outline"
-        className="flex justify-center items-center shadow border p-2.5"
+        className="flex justify-center items-center shadow border p-2.5 hover:bg-[#808A93] hover:text-white"
         onClick={openModal}
       >
         ლისტინგის წაშლა

@@ -8,6 +8,7 @@ import { TbRulerMeasure } from "react-icons/tb";
 import { BsSignpostFill } from "react-icons/bs";
 import { RealEstate } from "@/utils/types";
 
+
 interface RealEstateCardProps {
   estate: RealEstate | undefined;
 }

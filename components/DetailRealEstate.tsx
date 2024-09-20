@@ -120,13 +120,13 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
             <p className="text-base text-[#808A93] mt-6">{data?.description}</p>
             <div className="w-full rounded-[8px]  flex flex-col  p-2.5  border ">
               <div className="flex justify-start items-start gap-3 mb-2">
-                <div className="w-18 h-18  rounded-full overflow-hidden shadow border">
+                <div className="w-18 h-18  rounded-full overflow-hidden shadow ">
                   <Image
                     src={data?.agent?.avatar || "/default-avatar.jpg"}
                     alt="agent avatar"
                     width={72}
                     height={72}
-                    className="object-cover object-center rounded-full "
+                    className=" object-cover object-center  "
                   />
                 </div>
                 <div className="flex flex-col mt-2 items-start ">
@@ -155,7 +155,7 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
         <h1 className="self-start text-3xl text-[#021526]">
           ბინები მსგავს ლოკაციაზე{" "}
         </h1>
-        <RealEstateCarousel regionId={data?.city?.region.id} />
+        <RealEstateCarousel regionId={data?.city?.region.id} id={NumberId} />
       </div>
     </div>
   );

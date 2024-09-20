@@ -235,6 +235,7 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
           <RangeDropDown
             applyPriceFilters={applyPriceFilters}
             minValue={minPrice}
+            icon="₾"
             maxValue={maxPrice}
             setMinValue={setMinPrice}
             setMaxValue={setMaxPrice}
@@ -246,6 +247,7 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
           <RangeDropDown
             applyPriceFilters={applyAreaFilters}
             minValue={minArea}
+            icon="m²"
             maxValue={maxArea}
             setMinValue={setMinArea}
             setMaxValue={setMaxArea}

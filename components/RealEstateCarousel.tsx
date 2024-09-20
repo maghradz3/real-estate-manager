@@ -11,25 +11,26 @@ import { RealEstateSkeleton } from "./FIlterSkeleton";
 
 interface RealEstateCarouselProps {
   regionId: number | undefined;
+  id: number | undefined;
 }
 
-const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
+const RealEstateCarousel = ({ regionId, id }: RealEstateCarouselProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["real-estates"],
     queryFn: () => getAllRealEstates(),
   });
 
   const realEstatesByRegion = data?.filter(
-    (estate) => regionId === estate.city.region.id
+    (estate) => regionId === estate.city.region.id && estate.id !== id
   );
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const itemsPerPage = 3;
-  const totalItems = realEstatesByRegion?.length;
+  const totalItems = realEstatesByRegion?.length || 0;
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + itemsPerPage >= totalItems! ? 0 : prevIndex + itemsPerPage
+      prevIndex + itemsPerPage >= totalItems ? 0 : prevIndex + itemsPerPage
     );
   };
 
@@ -59,12 +60,11 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
 
   return (
     <>
-      <div className="relative border border-red-500 flex justify-center items-center">
+      <div className="relative  flex justify-center items-center">
         <Button
           variant="outline"
           onClick={handlePrevious}
           className="absolute left-[-60px] z-10 "
-          disabled={currentIndex === 0}
         >
           <FiArrowLeft className="text-lg" />
         </Button>
@@ -75,7 +75,7 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
                 className="flex transition-transform ease-in-out duration-700"
                 style={{
                   transform: `translateX(-${
-                    (currentIndex / totalItems!) * 100
+                    (currentIndex / totalItems) * 100
                   }%)`,
                 }}
               >
@@ -92,7 +92,6 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
           onClick={handleNext}
           variant="outline"
           className="absolute right-[-60px] z-10  "
-          disabled={currentIndex + itemsPerPage >= totalItems!}
         >
           <FiArrowRight className="text-lg" />
         </Button>

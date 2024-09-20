@@ -1,9 +1,9 @@
 "use client";
 import { getAllRealEstates } from "@/utils/action";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "framer-motion";
 import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
 import RealEstateCard from "./RealEstateCard";
@@ -85,12 +85,6 @@ const RealEstateListing = () => {
         <RealEstateSkeleton cardLength={8} />
       </div>
     );
-  }
-
-  console.log(isError, error);
-
-  if (error) {
-    return <div>Something went wrong. Please try again later.</div>;
   }
 
   return (
