@@ -8,14 +8,10 @@ import Link from "next/link";
 import { Toaster } from "@/components/ui/toaster";
 import ErrorBoundary from "./ErrorBoundary";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const firaGoReg = localFont({
+  src: "./fonts/FiraGO-Regular.woff2",
+
+  variable: "--font-firaGO",
   weight: "100 900",
 });
 
@@ -31,9 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${firaGoReg.variable} antialiased`}>
         <ErrorBoundary>
           <Providers>
             <header
@@ -44,9 +38,10 @@ export default function RootLayout({
                 <Image src={mainLogo} alt="Main logo" width={150} height={24} />
               </Link>
             </header>
-
-            {children}
-            <Toaster />
+            <div className="pb-[50px]">
+              {children}
+              <Toaster />
+            </div>
           </Providers>
         </ErrorBoundary>
       </body>

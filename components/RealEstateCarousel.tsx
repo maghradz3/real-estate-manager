@@ -24,7 +24,7 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
   );
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const itemsPerPage = 2;
+  const itemsPerPage = 3;
   const totalItems = realEstatesByRegion?.length;
 
   const handleNext = () => {
@@ -59,43 +59,43 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
 
   return (
     <>
-      <div className="relative w-full overflow-hidden">
-        <div className="flex  justify-center items-center">
-          <Button
-            variant="outline"
-            onClick={handlePrevious}
-            className="absolute left-0 z-10 "
-            disabled={currentIndex === 0}
-          >
-            <FiArrowLeft className="text-lg" />
-          </Button>
-
-          <div className="w-full overflow-hidden">
-            <div
-              className="flex transition-transform ease-in-out duration-700"
-              style={{
-                transform: `translateX(-${
-                  (currentIndex / totalItems!) * 100
-                }%)`,
-              }}
-            >
-              {realEstatesByRegion?.map((estate) => (
-                <div key={estate.id} className="min-w-[25%] p-4">
-                  <RealEstateCard estate={estate} />
-                </div>
-              ))}
+      <div className="relative border border-red-500 flex justify-center items-center">
+        <Button
+          variant="outline"
+          onClick={handlePrevious}
+          className="absolute left-[-60px] z-10 "
+          disabled={currentIndex === 0}
+        >
+          <FiArrowLeft className="text-lg" />
+        </Button>
+        <div className="relative w-full overflow-hidden">
+          <div className="flex  justify-center items-center">
+            <div className="w-full overflow-hidden">
+              <div
+                className="flex transition-transform ease-in-out duration-700"
+                style={{
+                  transform: `translateX(-${
+                    (currentIndex / totalItems!) * 100
+                  }%)`,
+                }}
+              >
+                {realEstatesByRegion?.map((estate) => (
+                  <div key={estate.id} className="min-w-[25%] p-4">
+                    <RealEstateCard estate={estate} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-
-          <Button
-            onClick={handleNext}
-            variant="outline"
-            className="absolute right-0 z-10  "
-            disabled={currentIndex + itemsPerPage >= totalItems!}
-          >
-            <FiArrowRight className="text-lg" />
-          </Button>
         </div>
+        <Button
+          onClick={handleNext}
+          variant="outline"
+          className="absolute right-[-60px] z-10  "
+          disabled={currentIndex + itemsPerPage >= totalItems!}
+        >
+          <FiArrowRight className="text-lg" />
+        </Button>
       </div>
     </>
   );

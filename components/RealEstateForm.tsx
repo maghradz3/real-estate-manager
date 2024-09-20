@@ -170,7 +170,7 @@ const RealEstateForm = () => {
   return (
     <div className="flex flex-col items-center mt-[80px] gap-10 ">
       <h1
-        className="text-3xl text-[#021526] font-medium;
+        className="text-3xl text-[#021526] font-bold;
 "
       >
         ლისტინგის დამატება

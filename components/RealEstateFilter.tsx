@@ -5,7 +5,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import CreateAgentModal from "./CreateAgentModal";
-
+import { motion } from "framer-motion";
+import { fadeIn } from "@/utils/variants";
 import {
   DropdownMenuTrigger,
   DropdownMenu,
@@ -184,17 +185,18 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     );
   };
 
-  // const arrowClasss = (openValue: boolean) => {
-  //   return openValue
-  //     ? "transform rotate-180 transition-transform duration-300"
-  //     : "transform rotate-0 transition-transform duration-300 border border-red-500";
-  // };
   if (loading) return <FIlterSkeleton />;
 
   return (
     <div className="w-full flex flex-col gap-3 ">
       <div className="   mt-[80px] flex justify-between items-center">
-        <div className="flex justify-start gap-6 items-center    shadow border rounded-md h-[47px] ">
+        <motion.div
+          variants={fadeIn("right", 0.3)}
+          initial="hidden"
+          animate="show"
+          exit="hidden"
+          className="flex justify-start gap-6 items-center    shadow border rounded-md h-[47px] "
+        >
           <DropdownMenu open={openRegion} onOpenChange={setOpenRegion}>
             <DropdownMenuTrigger className=" filter_Btn  flex justify-center items-center gap-2 ">
               რეგიონი
@@ -290,9 +292,15 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </motion.div>
 
-        <div className="flex justify-center items-center gap-3">
+        <motion.div
+          variants={fadeIn("left", 0.3)}
+          initial="hidden"
+          animate="show"
+          exit="hidden"
+          className="flex justify-center items-center gap-3"
+        >
           <Link href="/add-estate">
             <Button className="h-[47px]" variant="destructive">
               + ლისტრინგის დამატება
@@ -301,7 +309,7 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
           <Button variant="default" className="h-[47px]">
             <CreateAgentModal />
           </Button>
-        </div>
+        </motion.div>
       </div>
       <div className="w-full self-start flex justify-start items-start ">
         <div className="flex justify-center items-start gap-1">

@@ -2,11 +2,13 @@
 import { getAllRealEstates } from "@/utils/action";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
 import RealEstateCard from "./RealEstateCard";
 import { FIlterSkeleton, RealEstateSkeleton } from "./FIlterSkeleton";
+import { fadeIn } from "@/utils/variants";
 
 const RealEstateListing = () => {
   const { data, isError, error, isLoading, isFetching } = useQuery({
@@ -96,11 +98,17 @@ const RealEstateListing = () => {
       <RealEstateFilter onFilterChange={handleFilterChange} />
 
       {filteredData?.length ? (
-        <div className=" w-full grid grid-cols-3 gap-3  2xl:grid xl:grid-cols-4 xl:gap-5  ">
+        <motion.div
+          variants={fadeIn("up", 0.3)}
+          initial="hidden"
+          animate="show"
+          exit="hidden"
+          className=" w-full grid grid-cols-3 gap-3  2xl:grid xl:grid-cols-4 xl:gap-5  "
+        >
           {filteredData?.map((estate) => (
             <RealEstateCard estate={estate} key={estate.id} />
           ))}
-        </div>
+        </motion.div>
       ) : (
         <div className="self-start text-lg">
           აღნიშნული მონაცემებით განცხადება არ იძებნება

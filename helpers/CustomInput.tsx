@@ -49,8 +49,7 @@ const CustomInput = ({
         type="tel"
         inputMode="numeric"
         pattern="[0-3]*"
-        className={cn("input_default", {
-          "border border-default-secondary": isValid,
+        className={cn("h-[42px] rounded-md p-2.5 max-w-[384px]", {
           "border  border-default-primary focus-visible:outline-red-700": error,
         })}
         id={name}
