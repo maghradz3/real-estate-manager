@@ -13,6 +13,7 @@ interface RealEstateCardProps {
 }
 
 const RealEstateCard = ({ estate }: RealEstateCardProps) => {
+  const formatedPrice = estate?.price.toLocaleString("en-US");
   return (
     <>
       <Card key={estate?.id}>
@@ -35,7 +36,7 @@ const RealEstateCard = ({ estate }: RealEstateCardProps) => {
             </div>
           </div>
           <div className="py-5 px-6 flex flex-col justify-start items-start gap-1.5 ">
-            <h1 className="font-bold text-[28px] ">{estate?.price} ₾</h1>
+            <h1 className="font-bold text-[28px] ">{formatedPrice} ₾</h1>
             <p className="flex justify-center items-center gap-1 text-[#02152680]">
               <span>
                 <MdLocationPin />

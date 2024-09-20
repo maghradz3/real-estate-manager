@@ -18,21 +18,35 @@ export const realEstateSchema = z.object({
     .regex(/^\d+$/, "მხოლოდ რიცხვები")
     .nonempty("ზიპ კოდი სავალდებულოა"),
   price: z
-    .string()
-    .regex(/^\d+$/, "მხოლოდ რიცხვები")
-    .nonempty("ფასი სავალდებულოა"),
+    .preprocess(
+      (val) => (val !== "" ? Number(val) : null),
+      z
+        .number({ invalid_type_error: "მხოლოდ რიცხვები" })
+        .positive("ფასი სავალდებულოა და უნდა იყოს დადებითი")
+    )
+    .refine((val) => val !== null, {
+      message: "ეს ველი სავალდებულოა",
+    }),
   area: z
-    .string()
-    .regex(/^\d+(\.\d+)?$/, "მხოლოდ რიცხვები")
-    .nonempty("ფართი სავალდებულოა"),
+    .preprocess(
+      (val) => (val !== "" ? Number(val) : null),
+      z
+        .number({ invalid_type_error: "მხოლოდ რიცხვები" })
+        .positive("ფართი სავალდებულოა და უნდა იყოს დადებითი")
+    )
+    .refine((val) => val !== null, {
+      message: "ეს ველი სავალდებულოა",
+    }),
   bedrooms: z
     .string()
-    .regex(/^\d+$/, "მხოლოდ რიცხვი")
+    .regex(/^\d+$/, "მხოლოდ რიცხვები")
     .nonempty("საძინებლები სავალდებულოა"),
   description: z
     .string()
-    .min(5, "მინიმუმ 5 სიტყვა")
-    .nonempty("აღწერა სავალდებულოა"),
+
+    .refine((val) => val.split(" ").filter(Boolean).length >= 5, {
+      message: " მინიმუმ 5 სიტყვა",
+    }),
   is_rental: union([z.literal("0"), z.literal("1")]).refine(
     (val) => val !== undefined,
     "აირჩიეთ იყიდება თუ ქირავდება"
@@ -56,5 +70,9 @@ export const agentSchema = z.object({
     .nonempty("ნომერი სავალდებულოა"),
   avatar: z
     .instanceof(File)
-    .refine((file) => file.size > 0, "სავალდებულო ფოტო"),
+    .refine((file) => file.size <= 1000000, "სურათი უნდა იყოს 1MB-ზე ნაკლები")
+    .refine(
+      (file) => ["image/jpeg", "image/png"].includes(file.type),
+      "მხოლოდ JPG ან PNG ფორმატის სურათი"
+    ),
 });

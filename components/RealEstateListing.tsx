@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
 import RealEstateCard from "./RealEstateCard";
-import { RealEstateSkeleton } from "./FIlterSkeleton";
+import { FIlterSkeleton, RealEstateSkeleton } from "./FIlterSkeleton";
 
 const RealEstateListing = () => {
   const { data, isError, error, isLoading, isFetching } = useQuery({
@@ -14,14 +14,6 @@ const RealEstateListing = () => {
     queryFn: () => getAllRealEstates(),
     staleTime: 1000 * 60 * 5,
   });
-
-  if (isLoading) {
-    return (
-      <div>
-        <RealEstateSkeleton />
-      </div>
-    );
-  }
 
   const [filters, setFilters] = useState<{
     minPrice: number | null;
@@ -84,10 +76,11 @@ const RealEstateListing = () => {
     );
   });
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return (
       <div>
-        <RealEstateSkeleton />
+        <FIlterSkeleton />
+        <RealEstateSkeleton cardLength={8} />
       </div>
     );
   }

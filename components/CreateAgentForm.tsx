@@ -4,21 +4,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { agentSchema } from "@/utils/validationSchema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Image from "next/image";
-import {
- 
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createAgent } from "@/utils/action";
 import CustomInput from "@/helpers/CustomInput";
 
-import { handleKeyDown } from "@/helpers/NumericHandler";
 import plusImage from "../assets/plus-circle.png";
 
 import { cn } from "@/lib/utils";
+
+import { useToast } from "@/hooks/use-toast";
 
 interface CreateAgentFormProps {
   closeModal: (
@@ -36,19 +33,25 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors,  touchedFields },
+    formState: { errors, touchedFields, dirtyFields },
     setValue,
-    
+    watch,
     reset,
   } = useForm<AgentFormValues>({
     resolver: zodResolver(agentSchema),
     mode: "onChange",
+    defaultValues: {
+      name: "",
+      surname: "",
+      email: "",
+      phone: "",
+    },
   });
 
   const queryClient = useQueryClient();
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-
+  const { toast } = useToast();
 
   const { mutate } = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -56,14 +59,16 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
     },
     onSuccess: () => {
       setOpen(false);
-      console.log("success");
+
       queryClient.invalidateQueries({ queryKey: ["agents"] });
-      reset();
+      // reset();
+      toast({
+        description: "აგენტი წარმატებით დაემატა",
+      });
     },
   });
 
   const onSubmit = async (data: AgentFormValues) => {
-    console.log("subiting agent");
     const formData = new FormData();
     console.log(data.name);
     formData.append("name", data.name);
@@ -78,7 +83,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file);
+
     if (file) {
       setValue("avatar", file);
       setPreviewImage(URL.createObjectURL(file));
@@ -100,9 +105,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
             register={register("name")}
             error={errors.name}
             labelClassName="label_default"
-            inputClassName="input_default"
-            isValid={!errors.name && !!touchedFields.name}
-            isTouched={!!touchedFields.name}
+            isValid={!!dirtyFields.name && !errors.name}
           />
           <CustomInput
             label="გვარი *"
@@ -111,8 +114,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
             register={register("surname")}
             error={errors.surname}
             labelClassName="label_default"
-            isValid={!errors.name && !!touchedFields.name}
-            isTouched={!!touchedFields.name}
+            isValid={!!dirtyFields.surname && !errors.surname}
           />
 
           <CustomInput
@@ -122,21 +124,17 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
             register={register("email")}
             error={errors.email}
             labelClassName="label_default"
-            isValid={!errors.name && !!touchedFields.name}
-            isTouched={!!touchedFields.name}
+            isValid={!!dirtyFields.email && !errors.email}
           />
 
           <CustomInput
             label="ტელეფონი *"
             validate="მხოლოდ რიცხვები"
             name="phone"
-            tel="tel"
-            handleKeyDown={handleKeyDown}
             register={register("phone")}
             error={errors.phone}
             labelClassName="label_default"
-            isValid={!errors.name && !!touchedFields.name}
-            isTouched={!!touchedFields.name}
+            isValid={!!dirtyFields.phone && !errors.phone}
           />
         </div>
         <div className="mt-[20px]">

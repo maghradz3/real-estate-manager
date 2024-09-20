@@ -7,13 +7,14 @@ import RealEstateCard from "./RealEstateCard";
 
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { Button } from "./ui/button";
+import { RealEstateSkeleton } from "./FIlterSkeleton";
 
 interface RealEstateCarouselProps {
   regionId: number | undefined;
 }
 
 const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["real-estates"],
     queryFn: () => getAllRealEstates(),
   });
@@ -47,6 +48,14 @@ const RealEstateCarousel = ({ regionId }: RealEstateCarouselProps) => {
 
     return () => clearInterval(interval);
   }, [currentIndex, totalItems, handleNext]);
+
+  if (isLoading) {
+    return (
+      <div>
+        <RealEstateSkeleton cardLength={4} />
+      </div>
+    );
+  }
 
   return (
     <>

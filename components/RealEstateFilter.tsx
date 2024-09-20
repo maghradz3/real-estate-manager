@@ -183,12 +183,18 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
       )
     );
   };
+
+  // const arrowClasss = (openValue: boolean) => {
+  //   return openValue
+  //     ? "transform rotate-180 transition-transform duration-300"
+  //     : "transform rotate-0 transition-transform duration-300 border border-red-500";
+  // };
   if (loading) return <FIlterSkeleton />;
 
   return (
     <div className="w-full flex flex-col gap-3 ">
       <div className="   mt-[80px] flex justify-between items-center">
-        <div className="flex justify-start gap-6 items-center    shadow border rounded-md ">
+        <div className="flex justify-start gap-6 items-center    shadow border rounded-md h-[47px] ">
           <DropdownMenu open={openRegion} onOpenChange={setOpenRegion}>
             <DropdownMenuTrigger className=" filter_Btn  flex justify-center items-center gap-2 ">
               რეგიონი
@@ -292,9 +298,9 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
               + ლისტრინგის დამატება
             </Button>
           </Link>
-          <span className="border border-default-primary text-default-primary hover:text-white hover:bg-default-primary rounded-md ">
+          <Button variant="default" className="h-[47px]">
             <CreateAgentModal />
-          </span>
+          </Button>
         </div>
       </div>
       <div className="w-full self-start flex justify-start items-start ">

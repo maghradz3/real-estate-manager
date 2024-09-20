@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import {
   DropdownMenu,
@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { arrowClass } from "./reuseableClasses";
 
 interface DropdownSelectProps {
   forCities?: boolean;
@@ -16,12 +17,14 @@ interface DropdownSelectProps {
   onChange: (selectedId: number) => void;
   label: string;
   multiSelect?: boolean;
+  value: number | null;
 }
 
 const DropDownSelect = ({
   forCities,
   optionsRegion,
   optionsCity,
+  value,
   onChange,
   label,
 }: DropdownSelectProps) => {
@@ -36,21 +39,27 @@ const DropDownSelect = ({
     setIsOpen(true);
   };
 
+  useEffect(() => {
+    if (value !== null) {
+      setSelectedOption(value);
+    }
+  }, [value]);
+
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <label className="block mb-2 text-black ">{label}</label>
       <DropdownMenuTrigger
         asChild
-        className="w-full h-[42px] flex justify-between items-center border "
+        className="w-full h-[42px] flex justify-between items-center border p-2.5 rounded-[6px] "
         onClick={() => {
           setIsOpen(true);
         }}
       >
         <div>
           {generalOptions?.find((opt) => opt.id === selectedOption)?.name ||
-            "რეგიონი"}
+            label}
           <span className="ml-2">
-            <IoIosArrowDown />
+            <IoIosArrowDown className={arrowClass(isOpen)} />
           </span>
         </div>
       </DropdownMenuTrigger>
@@ -69,6 +78,7 @@ const DropDownSelect = ({
               className=" flex gap-2 justify-start items-center p-2 hover:bg-gray-200 "
             >
               <Checkbox
+                name="region_id"
                 checked={selectedOption === option.id}
                 onCheckedChange={() => handleSelect(option.id)}
               />

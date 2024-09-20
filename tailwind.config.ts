@@ -12,7 +12,7 @@ const config: Config = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        "green-1": "#22c55e",
+        "default-secondary": "#22c55e",
         "green-2": "#45A849",
         "default-primary": "#F93B1D",
         "destructive-primary": "#DF3014",

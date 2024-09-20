@@ -25,10 +25,14 @@ export const FIlterSkeleton = () => {
   );
 };
 
-export const RealEstateSkeleton = () => {
+type RealEstateSkeletonProps = {
+  cardLength: number;
+};
+
+export const RealEstateSkeleton = ({ cardLength }: RealEstateSkeletonProps) => {
   return (
     <div className="grid grid-cols-3 gap-3 2xl:grid xl:grid-cols-4 xl:gap-5">
-      {Array.from({ length: 8 }).map((_, index) => (
+      {Array.from({ length: cardLength }).map((_, index) => (
         <div key={index} className="card">
           <div className="relative overflow-hidden">
             <Skeleton className="h-[307px] w-full rounded-t-xl" />
@@ -49,15 +53,6 @@ export const RealEstateSkeleton = () => {
           </div>
         </div>
       ))}
-    </div>
-  );
-};
-
-export const RealEstateListingSkeleton = () => {
-  return (
-    <div className="w-full flex flex-col gap-3 ">
-      <FIlterSkeleton />
-      <RealEstateSkeleton />
     </div>
   );
 };

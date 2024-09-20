@@ -1,7 +1,7 @@
 "use client";
 import { deleteRealEstateById, getRealEstateById } from "@/utils/action";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -13,9 +13,12 @@ import { TbRulerMeasure } from "react-icons/tb";
 import { BsSignpost2Fill } from "react-icons/bs";
 import { CiMail } from "react-icons/ci";
 import { MdPhoneInTalk } from "react-icons/md";
+import { FaArrowLeft } from "react-icons/fa6";
 
 import EstateDeleteModal from "./EstateDeleteModal";
 import RealEstateCarousel from "./RealEstateCarousel";
+import { Button } from "./ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface detailRealEstateProps {
   id: string;
@@ -23,7 +26,7 @@ interface detailRealEstateProps {
 
 const DetailRealEstate = ({ id }: detailRealEstateProps) => {
   const NumberId = Number(id);
-  console.log(typeof NumberId);
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { data } = useQuery({
@@ -38,7 +41,12 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
     onSuccess: () => {
       console.log("deleted");
       queryClient.invalidateQueries({ queryKey: [id] });
+
       router.push("/");
+      toast({
+        description: "უძრავი ქონება წაიშლა",
+        duration: 5000,
+      });
     },
   });
 
@@ -53,13 +61,23 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
   };
 
   const formatedDate = formatDate(data?.created_at);
+  const formatedPrice = data?.price.toLocaleString("en-US");
 
   const onSubmit = () => {
     mutate(NumberId);
   };
-  console.log(data?.agent?.avatar);
+
   return (
-    <div className="flex flex-col justify-center w-full  items-center gap-16 mt-[125px] ">
+    <div className="flex flex-col justify-center w-full  items-center gap-7 mt-[64px] ">
+      <Button
+        variant="outline"
+        onClick={() => {
+          router.back();
+        }}
+        className="self-start"
+      >
+        <FaArrowLeft />
+      </Button>
       <div className="flex w-full justify-between items-center gap-[68px]  ">
         <div className="flex flex-col overflow-hidden  w-[839px] h-[714px]   rounded-t-[14px] ">
           <Image
@@ -76,7 +94,7 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
         <div className="flex h-full w-1/2 justify-start self-start pt-7">
           <div className="flex flex-col justify-start items-start gap-4">
             <h1 className="text-4xl text-black-2 font-extrabold mb-6">
-              {data?.price} ₾
+              {formatedPrice} ₾
             </h1>
             <IconText
               icon={<MdLocationPin />}
@@ -85,7 +103,7 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
             />
             <IconText
               icon={<TbRulerMeasure />}
-              text={`ფართი ${data?.area}`}
+              text={`ფართი ${data?.area}მ²`}
               className="text-2xl"
             />
             <IconText

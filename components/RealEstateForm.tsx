@@ -71,8 +71,8 @@ const RealEstateForm = () => {
     defaultValues: {
       address: "",
       zip_code: "",
-      price: "",
-      area: "",
+      // price: 0,
+      // area: 0,
       bedrooms: "",
       description: "",
       is_rental: "0",
@@ -96,6 +96,15 @@ const RealEstateForm = () => {
       const parsedData = JSON.parse(savedFormData);
       Object.keys(parsedData).forEach((key) => {
         setValue(key as keyof RealEstateFormValues, parsedData[key]);
+        if (parsedData.region_id) {
+          setSelectedRegion(Number(parsedData.region_id));
+        }
+        if (parsedData.city_id) {
+          setSelectedCity(Number(parsedData.city_id));
+        }
+        if (parsedData.agent_id) {
+          setSelectedAgent(Number(parsedData.agent_id));
+        }
       });
     }
   }, [setValue]);
@@ -147,8 +156,8 @@ const RealEstateForm = () => {
     formData.append("region_id", data.region_id);
     formData.append("city_id", data.city_id);
     formData.append("zip_code", data.zip_code);
-    formData.append("price", data.price);
-    formData.append("area", data.area);
+    formData.append("price", data.price.toString());
+    formData.append("area", data.area.toString());
     formData.append("bedrooms", data.bedrooms);
     formData.append("description", data.description);
     formData.append("is_rental", data.is_rental);
@@ -223,6 +232,7 @@ const RealEstateForm = () => {
           <div className="w-[384px]">
             <DropDownSelect
               optionsRegion={regions || []}
+              value={selectedRegion}
               label="რეგიონი *"
               onChange={(regionId) => {
                 setSelectedRegion(regionId);
@@ -233,20 +243,23 @@ const RealEstateForm = () => {
               <p className="text-red-500">{errors.region_id.message}</p>
             )}
           </div>
-          <div className="w-[384px]">
-            <DropDownSelect
-              forCities={true}
-              optionsCity={citiesFromRegion || []}
-              label="ქალაქი *"
-              onChange={(cityId) => {
-                setSelectedCity(cityId);
-                setValue("city_id", cityId.toString());
-              }}
-            />
-            {errors.region_id && (
-              <p className="text-red-500">{errors.region_id.message}</p>
-            )}
-          </div>
+          {selectedRegion !== null && (
+            <div className="w-[384px]">
+              <DropDownSelect
+                value={selectedCity}
+                forCities={true}
+                optionsCity={citiesFromRegion || []}
+                label="ქალაქი *"
+                onChange={(cityId) => {
+                  setSelectedCity(cityId);
+                  setValue("city_id", cityId.toString());
+                }}
+              />
+              {errors.region_id && (
+                <p className="text-red-500">{errors.region_id.message}</p>
+              )}
+            </div>
+          )}
         </div>
         <h1 className="text_default text-base">ბინის დეტალები</h1>
         <div className="grid grid-cols-2 gap-2">
@@ -287,10 +300,20 @@ const RealEstateForm = () => {
                 required: "მინიმუმ 5 სიტყვა",
               })}
             />
-            {errors.description && (
+            {errors?.description ? (
               <p className="text-red-500">
                 <span className=" ">&#10003;</span>
                 {errors.description.message}
+              </p>
+            ) : !!dirtyFields.description && !errors.description ? (
+              <p className="text-default-secondary">
+                <span className=" ">&#10003;</span>
+                მინიმუმ 5 სიტყვა
+              </p>
+            ) : (
+              <p className="text-black-1">
+                <span className=" ">&#10003;</span>
+                მინიმუმ 5 სიტყვა
               </p>
             )}
           </div>
@@ -362,7 +385,10 @@ const RealEstateForm = () => {
           <Button
             type="button"
             variant="default"
-            onClick={() => router.push("/")}
+            onClick={() => {
+              localStorage.removeItem(LOCAL_STORAGE_KEY);
+              router.push("/");
+            }}
           >
             გაუქმება
           </Button>
