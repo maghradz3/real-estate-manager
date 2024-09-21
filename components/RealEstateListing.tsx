@@ -52,16 +52,28 @@ const RealEstateListing = () => {
       return true;
     }
     const meetsPriceCriteria =
-      filters.minPrice &&
-      estate.price >= filters.minPrice &&
-      filters.maxPrice &&
-      estate.price < filters.maxPrice;
+      (filters.minPrice &&
+        filters.maxPrice === null &&
+        estate.price >= filters.minPrice) ||
+      (filters.maxPrice &&
+        filters.minPrice === null &&
+        estate.price < filters.maxPrice) ||
+      (filters.minPrice &&
+        filters.maxPrice &&
+        estate.price >= filters.minPrice &&
+        estate.price < filters.maxPrice);
 
     const meetsAreaCriteria =
-      filters.minArea &&
-      estate.area >= filters.minArea &&
-      filters.maxArea &&
-      estate.area < filters.maxArea;
+      (filters.minArea &&
+        filters.maxArea === null &&
+        estate.area >= filters.minArea) ||
+      (filters.maxArea &&
+        filters.minArea === null &&
+        estate.area < filters.maxArea) ||
+      (filters.minArea &&
+        filters.maxArea &&
+        estate.area >= filters.minArea &&
+        estate.area < filters.maxArea);
 
     const meetsRegionCriteria =
       filters.selectedRegions.length > 0 &&
