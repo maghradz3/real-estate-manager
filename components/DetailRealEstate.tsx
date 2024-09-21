@@ -42,7 +42,7 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
     },
     onSuccess: () => {
       console.log("deleted");
-      queryClient.invalidateQueries({ queryKey: [id] });
+      queryClient.invalidateQueries({ queryKey: ["real-estates"] });
 
       router.push("/");
       toast({
