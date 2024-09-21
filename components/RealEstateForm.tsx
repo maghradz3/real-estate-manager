@@ -5,7 +5,7 @@ import {
   getAllCities,
   getAllRegions,
 } from "@/utils/action";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,6 +52,7 @@ const RealEstateForm = () => {
     queryKey: ["agents"],
     queryFn: () => getAllAgents(),
   });
+  const queryClient = useQueryClient();
 
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [selectedCity, setSelectedCity] = useState<number | null>(null);
@@ -117,6 +118,7 @@ const RealEstateForm = () => {
     },
     onSuccess: () => {
       console.log("success");
+      queryClient.invalidateQueries({ queryKey: ["real-estates"] });
       router.push("/");
       toast({
         description: "ახალი ლისტი წარმატებით შეიქმნა",

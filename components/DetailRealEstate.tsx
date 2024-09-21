@@ -178,7 +178,7 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
           </div>
         </motion.div>
       </div>
-      <div className="mt-12 flex flex-col items-center gap-12">
+      <div className="mt-12 w-full flex flex-col items-center gap-12 ">
         <h1 className="self-start text-3xl text-[#021526]">
           ბინები მსგავს ლოკაციაზე{" "}
         </h1>
