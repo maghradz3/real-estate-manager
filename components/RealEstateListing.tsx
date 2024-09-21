@@ -1,9 +1,9 @@
 "use client";
 import { getAllRealEstates } from "@/utils/action";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
-import { useInView } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+
 import { RealEstate } from "@/utils/types";
 import RealEstateFilter from "./RealEstateFilter";
 import RealEstateCard from "./RealEstateCard";

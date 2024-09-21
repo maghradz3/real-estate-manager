@@ -33,10 +33,8 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, touchedFields, dirtyFields },
+    formState: { errors, dirtyFields },
     setValue,
-    watch,
-    reset,
   } = useForm<AgentFormValues>({
     resolver: zodResolver(agentSchema),
     mode: "onChange",
@@ -104,7 +102,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
             name="name"
             register={register("name")}
             error={errors.name}
-            labelClassName="label_default"
+            labelClassName="text-sm font-semibold"
             isValid={!!dirtyFields.name && !errors.name}
           />
           <CustomInput
@@ -113,7 +111,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
             name="surname"
             register={register("surname")}
             error={errors.surname}
-            labelClassName="label_default"
+            labelClassName="text-sm font-semibold"
             isValid={!!dirtyFields.surname && !errors.surname}
           />
 
@@ -123,7 +121,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
             name="email"
             register={register("email")}
             error={errors.email}
-            labelClassName="label_default"
+            labelClassName="text-sm font-semibold"
             isValid={!!dirtyFields.email && !errors.email}
           />
 
@@ -133,12 +131,12 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({
             name="phone"
             register={register("phone")}
             error={errors.phone}
-            labelClassName="label_default"
+            labelClassName="text-sm font-semibold"
             isValid={!!dirtyFields.phone && !errors.phone}
           />
         </div>
         <div className="mt-[20px]">
-          <label className="label_default" htmlFor="image">
+          <label className="text-sm font-semibold" htmlFor="image">
             ატვირთეთ ფოტო *
           </label>
           <div className="flex justify-center items-center w-full h-[144px] border-2 border-dashed border-gray-300 rounded-md relative cursor-pointer">

@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { arrowClass } from "@/helpers/reuseableClasses";
+
 import { IoIosArrowDown } from "react-icons/io";
 
 type RangeDropdownProps = {
@@ -50,6 +50,12 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
     setOpen(false);
   };
 
+  const arrowClass = (openValue: boolean) => {
+    return openValue
+      ? "transform rotate-180 transition-transform duration-300"
+      : "transform rotate-0 transition-transform duration-300 ";
+  };
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="filter_Btn flex justify-center items-center gap-2">
@@ -58,8 +64,8 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
           <IoIosArrowDown className={arrowClass(open)} />
         </span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex flex-col p-2.5">
-        <h1>{`${label} მიხედვით`}</h1>
+      <DropdownMenuContent align="start" className="flex flex-col p-6">
+        <h1 className="mb-6 font-bold text-base">{`${label} მიხედვით`}</h1>
         <div className="flex justify-center items-center gap-3 ">
           <div>
             <div className="flex justify-center items-center relative ">
@@ -67,20 +73,20 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
                 type="number"
                 value={minValue || ""}
                 onChange={(e) => setMinValue(Number(e.target.value) || null)}
-                placeholder={`დან${icon}`}
+                placeholder={`დან`}
                 className=" border relative p-2 rounded "
               />
               <span className="absolute right-5">{icon}</span>
             </div>
-            <p>მინ.{label}</p>
+            <p className="mt-6 mb-4 text-sm font-semibold">მინ.{icon}</p>
             <div className="flex flex-col">
               {minList.map((value) => (
                 <button
                   key={value}
                   onClick={() => setMinValue(value)}
-                  className="p-2 self-start"
+                  className="p-2 self-start text-sm "
                 >
-                  {value}
+                  {`${value} ${icon}`}
                 </button>
               ))}
             </div>
@@ -98,14 +104,14 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
               <span className="absolute right-5">{icon}</span>
             </div>
             <div className="flex flex-col">
-              <p>მაქს.{label}</p>
+              <p className="mt-6 mb-4 text-sm font-semibold">მაქს.{label}</p>
               {maxList.map((value) => (
                 <button
                   key={value}
                   onClick={() => setMaxValue(value)}
-                  className="p-2 self-start"
+                  className="p-2 self-start text-sm"
                 >
-                  {value}
+                  {`${value} ${icon}`}
                 </button>
               ))}
             </div>
@@ -117,7 +123,7 @@ const RangeDropDown: React.FC<RangeDropdownProps> = ({
         <Button
           onClick={handleChooseClick}
           variant="destructive"
-          className="self-end"
+          className="self-end "
         >
           არჩევა
         </Button>

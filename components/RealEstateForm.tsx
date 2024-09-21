@@ -32,6 +32,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { Agents } from "@/utils/types";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+import { fadeIn } from "@/utils/variants";
 
 const LOCAL_STORAGE_KEY = "realEstateFormData";
 
@@ -168,7 +170,13 @@ const RealEstateForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center mt-[80px] gap-10 ">
+    <motion.div
+      variants={fadeIn("up", 0.3)}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+      className="flex flex-col items-center mt-[80px] gap-10 "
+    >
       <h1
         className="text-3xl text-[#021526] font-bold;
 "
@@ -181,7 +189,7 @@ const RealEstateForm = () => {
         className="flex flex-col"
       >
         <div className="mb-20">
-          <h1 className="text_defautl text-md text-bold">გარიგების ტიპი</h1>
+          <h1 className=" text-base font-semibold">გარიგების ტიპი</h1>
           <div className="flex items-center space-x-4">
             <label className="flex items-center space-x-2">
               <input
@@ -209,11 +217,12 @@ const RealEstateForm = () => {
             <p className="text-red-500">{errors.is_rental.message}</p>
           )}
         </div>
-        <h1 className="text_default text-md text-bold ">მდებარეობა</h1>
+        <h1 className=" text-base font-semibold mb-5 ">მდებარეობა</h1>
         <div className="grid grid-cols-2 grid-rows-2 gap-5 w-full mb-20">
           <CustomInput
             label="მისამართი *"
             name="address"
+            labelClassName="text-sm font-semibold "
             register={register("address")}
             validate="მინიმუმ 2 სიმბოლო"
             error={errors.address}
@@ -223,6 +232,7 @@ const RealEstateForm = () => {
           <CustomInput
             label="საფოსტო ინდექსი *"
             name="zip_code"
+            labelClassName="text-sm font-semibold "
             register={register("zip_code")}
             error={errors.zip_code}
             validate="მხოლოდ რიცხვები"
@@ -261,10 +271,11 @@ const RealEstateForm = () => {
             </div>
           )}
         </div>
-        <h1 className="text_default text-base">ბინის დეტალები</h1>
+        <h1 className="font-bold text-base mb-5">ბინის დეტალები</h1>
         <div className="grid grid-cols-2 gap-2">
           <CustomInput
             label="ფასი *"
+            labelClassName="text-sm font-semibold "
             name="price"
             register={register("price")}
             error={errors.price}
@@ -274,6 +285,7 @@ const RealEstateForm = () => {
           />
           <CustomInput
             label="ფართობი *"
+            labelClassName="text-sm font-semibold "
             name="area"
             register={register("area")}
             error={errors.area}
@@ -283,6 +295,7 @@ const RealEstateForm = () => {
           />
           <CustomInput
             label="საძინებლების რაოდენობა *"
+            labelClassName="text-sm font-semibold "
             name="bedrooms"
             register={register("bedrooms")}
             error={errors.bedrooms}
@@ -293,7 +306,9 @@ const RealEstateForm = () => {
         </div>
         <div className="mt-5">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="description">აღწერა *</Label>
+            <Label className="font-bold text-sm" htmlFor="description">
+              აღწერა *
+            </Label>
             <Textarea
               id="description"
               {...register("description", {
@@ -318,7 +333,7 @@ const RealEstateForm = () => {
             )}
           </div>
           <div className="mt-[20px]">
-            <label className="label_default" htmlFor="image">
+            <label className="text-sm font-semibold" htmlFor="image">
               ატვირთეთ ფოტო *
             </label>
             <div className="flex justify-center items-center w-full h-[144px] border-2 border-dashed border-gray-300 rounded-md relative cursor-pointer">
@@ -354,6 +369,10 @@ const RealEstateForm = () => {
             </div>
           </div>
           <div className="mt-20">
+            <div>
+              <h1 className=" text-base font-semibold">აგენტი</h1>
+              <p className="text-sm font-semibold mt-4">აირჩიე</p>
+            </div>
             <DropdownMenu>
               <DropdownMenuTrigger className="border w-[384px] h-[42px] rounded-md flex justify-between items-center p-2.5 ">
                 {selectedAgentName}
@@ -361,9 +380,13 @@ const RealEstateForm = () => {
                   <IoIosArrowDown />
                 </span>
               </DropdownMenuTrigger>
-              <DropdownMenuContent side="bottom">
+              <DropdownMenuContent
+                className="max-h-[300px] overflow-y-scroll "
+                side="bottom"
+                align="start"
+              >
                 <div>
-                  <CreateAgentModal />
+                  <CreateAgentModal isUnderlined={true} />
                 </div>
                 {agents?.map((agent: Agents) => (
                   <DropdownMenuItem
@@ -372,7 +395,7 @@ const RealEstateForm = () => {
                       setValue("agent_id", agent.id.toString());
                     }}
                     key={agent.id}
-                    className="flex h-[42px] p-2.5  w-full justify-start items-center gap-3 border-b  "
+                    className="flex h-[42px] p-2.5  w-full justify-start items-center gap-3 border-b border-b-[#808A93]  "
                   >
                     <p>{`${agent.name} ${agent.surname}`}</p>
                   </DropdownMenuItem>
@@ -397,7 +420,7 @@ const RealEstateForm = () => {
           </Button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

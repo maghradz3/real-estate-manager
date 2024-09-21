@@ -7,7 +7,7 @@ import { IoBedSharp } from "react-icons/io5";
 import { TbRulerMeasure } from "react-icons/tb";
 import { BsSignpostFill } from "react-icons/bs";
 import { RealEstate } from "@/utils/types";
-
+import IconText from "./IconText";
 
 interface RealEstateCardProps {
   estate: RealEstate | undefined;
@@ -25,6 +25,7 @@ const RealEstateCard = ({ estate }: RealEstateCardProps) => {
               alt="appartment image"
               width={384}
               height={307}
+              priority
               className=" border object-cover object-center  w-full h-full rounded-t-xl"
             />
             <div
@@ -38,25 +39,27 @@ const RealEstateCard = ({ estate }: RealEstateCardProps) => {
           </div>
           <div className="py-5 px-6 flex flex-col justify-start items-start gap-1.5 ">
             <h1 className="font-bold text-[28px] ">{formatedPrice} ₾</h1>
-            <p className="flex justify-center items-center gap-1 text-[#02152680]">
-              <span>
-                <MdLocationPin />
-              </span>
-              {estate?.address}
-            </p>
+            <IconText
+              icon={<MdLocationPin />}
+              text={estate?.address}
+              className="flex justify-center items-center gap-1 text-[#02152680]"
+            />
             <div className="flex justify-center items-center gap-7 mt-5">
-              <p className="flex justify-center items-center gap-1 text-[#02152680]">
-                <IoBedSharp /> {estate?.bedrooms}
-              </p>
-              <p className="flex justify-center items-center gap-1 text-[#02152680]">
-                {" "}
-                <TbRulerMeasure />
-                {estate?.area} მ²
-              </p>
-              <p className="flex justify-center items-center gap-1 text-[#02152680]">
-                <BsSignpostFill />
-                {estate?.zip_code}
-              </p>
+              <IconText
+                icon={<IoBedSharp />}
+                text={estate?.bedrooms}
+                className="flex justify-center items-center gap-1 text-[#02152680]"
+              />
+              <IconText
+                icon={<TbRulerMeasure />}
+                text={estate?.area}
+                className="flex justify-center items-center gap-1 text-[#02152680]"
+              />
+              <IconText
+                icon={<BsSignpostFill />}
+                text={estate?.zip_code}
+                className="flex justify-center items-center gap-1 text-[#02152680]"
+              />
             </div>
           </div>
         </Link>

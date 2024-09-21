@@ -15,7 +15,7 @@ import {
 
 import RangeDropDown from "./FilterDropDown";
 import { IoIosArrowDown } from "react-icons/io";
-import { arrowClass } from "@/helpers/reuseableClasses";
+
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
 
@@ -93,7 +93,6 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
   useEffect(() => {
     const savedFilters = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedFilters) {
-      console.log(loading);
       const parsedFilters = JSON.parse(savedFilters);
       setMinPrice(parsedFilters.minPrice || null);
       setMaxPrice(parsedFilters.maxPrice || null);
@@ -113,13 +112,13 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     applyFilters({ minArea: minValue, maxArea: maxValue });
   };
 
-  const minPriceList = [5000, 10000, 15000];
-  const maxPriceList = [20000, 30000, 40000];
+  const minPriceList = [5000, 10000, 50000, 100000, 150000];
+  const maxPriceList = [20000, 50000, 100000, 200000, 400000];
 
-  const minAreaList = [50, 100, 150];
-  const maxAreaList = [200, 300, 400];
+  const minAreaList = [50, 100, 150, 200, 250];
+  const maxAreaList = [200, 300, 400, 500, 600];
 
-  const bedroomsList = [1, 2, 3, 4, 5];
+  const bedroomsList = [1, 2, 3, 4, 5, 6];
 
   const selectedRegionsName = regions?.filter((region) =>
     selectedRegions.includes(region.id)
@@ -185,6 +184,12 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
     );
   };
 
+  const arrowClass = (openValue: boolean) => {
+    return openValue
+      ? "transform rotate-180 transition-transform duration-300"
+      : "transform rotate-0 transition-transform duration-300 ";
+  };
+
   if (loading) return <FIlterSkeleton />;
 
   return (
@@ -204,11 +209,14 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
                 <IoIosArrowDown className={arrowClass(openRegion)} />
               </span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className=" flex flex-col items-center gap-3 p-6 border-md">
-              <h1 className="text_default text-base font-bold self-start">
+            <DropdownMenuContent
+              align="start"
+              className=" flex flex-col items-center gap-6 p-6 border-md"
+            >
+              <h1 className=" text-base font-bold self-start">
                 რეგიონის მიხედვით
               </h1>
-              <div className="grid grid-cols-3 grid-rows-4 gap-x-12 gap-y-4 ">
+              <div className="grid grid-cols-3 grid-rows-4 gap-x-12 gap-y-4 mb-3 ">
                 {regions?.map((region) => (
                   <label key={region.id} className="flex items-center">
                     <Checkbox
@@ -262,13 +270,16 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
                 <IoIosArrowDown className={arrowClass(openBedroom)} />
               </span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <div className="flex flex-col justify-start items-center gap-5 p-2.5">
+            <DropdownMenuContent align="start">
+              <div className="flex flex-col justify-start items-center gap-5 p-6">
+                <h1 className="font-bold text-base self-start ">
+                  საძინებლების რაოდენობა
+                </h1>
                 <div className="flex justify-start items-center gap-5">
                   {bedroomsList.map((bedroom) => (
                     <Button
                       className={cn(
-                        "border border-black-1 text-black-1 hover:bg-black-1 hover:text-white",
+                        "border mb-3 border-black-1 text-black-1 hover:bg-black-1 hover:text-white",
                         {
                           "bg-black-1 text-white": bedrooms === bedroom,
                         }
@@ -308,9 +319,9 @@ const RealEstateFilter = ({ onFilterChange }: FilterProps) => {
               + ლისტრინგის დამატება
             </Button>
           </Link>
-          <Button variant="default" className="h-[47px]">
+          <div className="h-[47px] flex justify-center items-center border py-2.5 px-4 rounded-[10px] border-default-primary text-default-primary hover:bg-default-primary hover:text-white transition-colors duration-200 ease-in-out  ">
             <CreateAgentModal />
-          </Button>
+          </div>
         </motion.div>
       </div>
       <div className="w-full self-start flex justify-start items-start ">

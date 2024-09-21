@@ -56,3 +56,43 @@ export const RealEstateSkeleton = ({ cardLength }: RealEstateSkeletonProps) => {
     </div>
   );
 };
+
+export const DetailRealEstateSkeleton = () => {
+  return (
+    <div className="flex w-full justify-between items-center gap-[68px]">
+      <div className="flex flex-col overflow-hidden w-[839px] h-[714px] rounded-t-[14px]">
+        <Skeleton className="w-full h-[714px] rounded-t-xl" />
+        <Skeleton className="self-end mt-4 w-1/4 h-4" />
+      </div>
+
+      <div className="flex h-full w-1/2 justify-start self-start pt-7">
+        <div className="flex flex-col justify-start items-start gap-4">
+          <Skeleton className="w-[200px] h-8 mb-6" />
+
+          {/* Address, Area, Bedrooms, Zip Code */}
+          <Skeleton className="w-[300px] h-6" />
+          <Skeleton className="w-[250px] h-6" />
+          <Skeleton className="w-[150px] h-6" />
+          <Skeleton className="w-[200px] h-6" />
+
+          <Skeleton className="mt-6 w-full h-24" />
+
+          <div className="w-full rounded-[8px] flex flex-col p-2.5 border">
+            <div className="flex justify-start items-start gap-3 mb-2">
+              <Skeleton className="w-[72px] h-[72px] rounded-full" />
+              <div className="flex flex-col mt-2 items-start">
+                <Skeleton className="w-[150px] h-4" />
+                <Skeleton className="mt-2 w-[100px] h-4" />
+              </div>
+            </div>
+
+            <Skeleton className="w-[200px] h-4 mt-2" />
+            <Skeleton className="w-[150px] h-4 mt-2" />
+          </div>
+
+          <Skeleton className="w-full h-10 mt-4" />
+        </div>
+      </div>
+    </div>
+  );
+};

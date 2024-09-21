@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { arrowClass } from "./reuseableClasses";
 
 interface DropdownSelectProps {
   forCities?: boolean;
@@ -44,6 +43,12 @@ const DropDownSelect = ({
       setSelectedOption(value);
     }
   }, [value]);
+
+  const arrowClass = (openValue: boolean) => {
+    return openValue
+      ? "transform rotate-180 transition-transform duration-300"
+      : "transform rotate-0 transition-transform duration-300 ";
+  };
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>

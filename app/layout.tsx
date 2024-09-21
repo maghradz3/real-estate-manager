@@ -17,7 +17,8 @@ const firaGoReg = localFont({
 
 export const metadata: Metadata = {
   title: "Real Estate Manager",
-  description: "",
+  description:
+    "Real Estate Manager is a web application for managing real estate",
 };
 
 export default function RootLayout({
@@ -35,7 +36,13 @@ export default function RootLayout({
 ]  border border-[#DBDBDB]"
             >
               <Link href="/">
-                <Image src={mainLogo} alt="Main logo" width={150} height={24} />
+                <Image
+                  priority
+                  src={mainLogo}
+                  alt="Main logo"
+                  width={150}
+                  height={24}
+                />
               </Link>
             </header>
             <div className="pb-[50px]">
