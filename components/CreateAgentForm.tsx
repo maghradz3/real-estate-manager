@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { agentSchema } from "@/utils/validationSchema";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

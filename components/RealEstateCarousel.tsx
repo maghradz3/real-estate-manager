@@ -28,19 +28,19 @@ const RealEstateCarousel = ({ regionId, id }: RealEstateCarouselProps) => {
   const itemsPerPage = 2;
   const totalItems = realEstatesByRegion?.length || 0;
 
-  const handleNext = () => {
+  const handleNext = React.useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex + itemsPerPage >= totalItems ? 0 : prevIndex + itemsPerPage
     );
-  };
+  }, [itemsPerPage, totalItems]);
 
-  const handlePrevious = () => {
+  const handlePrevious = React.useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex - itemsPerPage < 0
         ? totalItems! - itemsPerPage
         : prevIndex - itemsPerPage
     );
-  };
+  }, [itemsPerPage, totalItems]);
 
   useEffect(() => {
     const interval = setInterval(() => {
