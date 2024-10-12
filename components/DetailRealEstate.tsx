@@ -31,7 +31,7 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [id],
     queryFn: () => getRealEstateById(NumberId),
   });
@@ -41,7 +41,6 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
       return await deleteRealEstateById(id);
     },
     onSuccess: () => {
-      console.log("deleted");
       queryClient.invalidateQueries({ queryKey: ["real-estates"] });
 
       router.push("/");
@@ -144,7 +143,9 @@ const DetailRealEstate = ({ id }: detailRealEstateProps) => {
                 className="text-2xl"
               />
             </div>
-            <p className="text-base text-[#808A93] mt-6">{data?.description}</p>
+            <p className="text-base text-[#808A93] mt-6 overflow-y-auto ">
+              {data?.description}
+            </p>
             <div className="w-full rounded-[8px]  flex flex-col  p-2.5  border ">
               <div className="flex justify-start items-start gap-3 mb-2">
                 <div className="w-[72px] h-[72px]  rounded-full overflow-hidden shadow ">

@@ -11,7 +11,7 @@ import { FIlterSkeleton, RealEstateSkeleton } from "./FIlterSkeleton";
 import { fadeIn } from "@/utils/variants";
 
 const RealEstateListing = () => {
-  const { data, isError, error, isLoading, isFetching } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["real-estates"],
     queryFn: () => getAllRealEstates(),
     staleTime: 1000 * 60 * 5,
